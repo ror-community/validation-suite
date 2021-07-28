@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  validate-ror:
+    build: .
+    container_name: validate
+    volumes:
+    - .:/usr/src/app
+    #- mount additional test files here. Ex:
+    #-path/on/local/machine/ror-files:/path/in/container/ror-files
+    working_dir: "/usr/src/app"
+    stdin_open: true
+    tty: true
