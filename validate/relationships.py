@@ -2,7 +2,6 @@ import json
 import sys
 import os
 import requests
-import validate.validation_helpers as vh
 from validate.utilities import *
 
 info = {"file_path": None, "record_info": None}

@@ -5,8 +5,8 @@ import requests
 import validators
 import pycountry
 import validate.utilities as u
-import validate.validation_helpers as vh
-import validate.validate_relationships as vr
+import validate.helpers as vh
+import validate.relationships as vr
 
 class Validate_Tests:
     def __init__(self,file):

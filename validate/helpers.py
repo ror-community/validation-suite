@@ -4,8 +4,6 @@ import jsonschema
 import requests
 import validators
 from validate.utilities import *
-import pycountry
-
 
 File = None
 

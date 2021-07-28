@@ -1,6 +1,6 @@
 import argparse
 import validate.validation as vt
-import validate.validateror as vs
+import validate.schema as vs
 import validate.utilities as u
 import os
 import sys
