@@ -106,8 +106,8 @@
   ],
   "addresses": [
     {
-      "lat": 48.117976,
-      "lng": -1.637993,
+      "lat": 48.11198,
+      "lng": -1.67429,
       "state": null,
       "state_code": null,
       "city": "Rennes",
@@ -121,9 +121,9 @@
           "code": "FR.53"
         },
         "geonames_admin2": {
-          "name": "Département d'Ille-et-Vilaine",
+          "name": "Ille-et-Vilaine",
           "id": 3012849,
-          "ascii_name": "Departement d'Ille-et-Vilaine",
+          "ascii_name": "Ille-et-Vilaine",
           "code": "FR.53.35"
         },
         "license": {

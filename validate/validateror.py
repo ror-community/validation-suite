@@ -19,11 +19,11 @@ def validate_file(file,schema):
     arg_exists(file)
     valid = False
     schema = get_file_from_url() if schema is None else get_json(schema,stype)
-    msg = {}
+    msg = None
     json = get_json(file)
     try:
         validate(instance = json, schema = schema)
     except jsonschema.exceptions.ValidationError as err:
-        msg[file] = err
+        msg = err
     valid = False if msg else True
     return valid, msg

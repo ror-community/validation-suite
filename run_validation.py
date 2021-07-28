@@ -58,10 +58,8 @@ def main():
                         print(f"In {loc}: {msg}")
         else:
             validation_errors = True
-            print("VALIDATION TEST ERRORS: \n")
-            for file, err in msg.items():
-                print(f"File: {file}: \n")
-                print(err)
+            print("SCHEMA VALIDATION ERROR: \n")
+            print(f"FILE: {filename}, {msg}")
 
     if validation_errors:
         exit(1)
