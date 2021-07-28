@@ -46,22 +46,12 @@ class Validate_Tests:
         if geonames_response:
             mapped_fields = vh.mapped_geoname_record()
             compare = vh.compare_ror_geoname(mapped_fields,address,geonames_response)
-            if len(compare) == 0:
-                    result = True
+            country_test = vh.check_country(geonames_response)
+            if country_test:
+                compare.update(country_test)
         else:
             compare["ERROR"] = msg
         return vh.handle_check(name,compare)
-
-
-    def check_country_code(self):
-        # checks country code
-        name = str(self.check_country_code.__name__)
-        country = vh.File['country']['country_code']
-        msg = None
-        pcountry = pycountry.countries.get(alpha_2=country)
-        if not(pcountry):
-            msg = f'Country value: {country} is not in iso3166 standard'
-        return vh.handle_check(name,msg)
 
     def check_language_code(self):
         # checks language code

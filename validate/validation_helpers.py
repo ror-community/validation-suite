@@ -24,6 +24,18 @@ def validate_url(url):
         msg = "Validation Error"
     return msg
 
+def check_country(geonames_response):
+    country_check = {}
+    geonames_country_code = geonames_response['countryCode']
+    record_country_code = File['country']['country_code']
+    geonames_country_name = geonames_response['countryName']
+    record_country_name = File['country']['country_name']
+    if geonames_country_code != record_country_code:
+        country_check['country_code'] = {'ror': record_country_code, 'geonames': geonames_country_code}
+    if geonames_country_name != record_country_name:
+        country_check['country_name'] = {'ror': record_country_name, 'geonames': geonames_country_name}
+    return country_check
+
 def mapped_geoname_record():
     # mapping of ror fields to geoname response fields
     ror_to_geoname = {
