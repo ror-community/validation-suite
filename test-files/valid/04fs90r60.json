@@ -1,0 +1,112 @@
+{
+"id": "https://ror.org/04fs90r60",
+"name": "Tamil Nadu Agricultural University",
+"email_address": null,
+"ip_addresses": [],
+"established": 1971,
+"types": [
+"Education"
+],
+"relationships": [],
+"addresses": [
+{
+"lat": 11.012499,
+"lng": 76.940881,
+"state": null,
+"state_code": null,
+"city": "Coimbatore",
+"geonames_city": {
+"id": 1273865,
+"city": "Coimbatore",
+"geonames_admin1": {
+"name": "Tamil Nadu",
+"id": 1255053,
+"ascii_name": "Tamil Nadu",
+"code": "IN.25"
+},
+"geonames_admin2": {
+"name": "Coimbatore",
+"id": 1273866,
+"ascii_name": "Coimbatore",
+"code": "IN.25.632"
+},
+"license": {
+"attribution": "Data from geonames.org under a CC-BY 3.0 license",
+"license": "http://creativecommons.org/licenses/by/3.0/"
+},
+"nuts_level1": {
+"name": null,
+"code": null
+},
+"nuts_level2": {
+"name": null,
+"code": null
+},
+"nuts_level3": {
+"name": null,
+"code": null
+}
+},
+"postcode": null,
+"primary": false,
+"line": null,
+"country_geonames_id": 1269750
+}
+],
+"links": [
+"http://www.tnau.ac.in/"
+],
+"aliases": [],
+"acronyms": [
+"TNAU"
+],
+"status": "active",
+"wikipedia_url": "http://en.wikipedia.org/wiki/Tamil_Nadu_Agricultural_University",
+"labels": [
+{
+"label": "தமிழ்நாடு வேளாண்மைப் பல்கலைக்கழகம்",
+"iso639": "ta"
+},
+{
+"label": "തമിഴ്നാട് കാർഷിക സർവകലാശാല",
+"iso639": "ml"
+},
+{
+"label": "तमिल नाडु कृषि विश्वविद्यालय",
+"iso639": "hi"
+},
+{
+"label": "Université agricole de tamil nadu",
+"iso639": "fr"
+}
+],
+"country": {
+"country_name": "India",
+"country_code": "IN"
+},
+"external_ids": {
+"ISNI": {
+"preferred": null,
+"all": [
+"0000 0001 2155 9899"
+]
+},
+"OrgRef": {
+"preferred": "2513652",
+"all": [
+"2513652",
+"13546346"
+]
+},
+"Wikidata": {
+"preferred": null,
+"all": [
+"Q3522654"
+]
+},
+"GRID": {
+"preferred": "grid.412906.8",
+"all": "grid.412906.8"
+}
+}
+}
