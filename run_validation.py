@@ -10,7 +10,7 @@ import json
 def set_args():
     parser = argparse.ArgumentParser(
                     description="Script to validate ROR files")
-    parser.add_argument('-i', '--input', help='Path to one file or a directory', required=True)
+    parser.add_argument('-i', '--input', help='Path to one file or one directory for validation', required=True)
     parser.add_argument('-s', '--schema', help='Path or URL to schema')
     parser.add_argument('-p', '--file-path', help='Path to the rest of the files for relationship validation')
     args = parser.parse_args()
