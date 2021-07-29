@@ -45,7 +45,7 @@ class Validate_Tests:
         geonames_response,msg = vh.get_geonames_response(id)
         if geonames_response:
             mapped_fields = vh.mapped_geoname_record()
-            compare = vh.compare_ror_geoname(mapped_fields,address,geonames_response)
+            compare = vh.compare_ror_geoname(mapped_fields,address,geonames_response,{})
             country_test = vh.check_country(geonames_response)
             if country_test:
                 compare.update(country_test)

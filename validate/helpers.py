@@ -4,6 +4,7 @@ import jsonschema
 import requests
 import validators
 from validate.utilities import *
+from copy import deepcopy
 
 File = None
 
@@ -108,4 +109,4 @@ def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
                     geonames_value = geonames_response[value]
             if str(ror_value) != str(geonames_value):
                 compare[key] = {"ror": ror_value, "geonames": geonames_value}
-    return compare
+    return deepcopy(compare)
