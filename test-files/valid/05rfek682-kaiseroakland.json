@@ -1,0 +1,104 @@
+{
+"id": "https://ror.org/05rfek682",
+"name": "Kaiser Permanente Oakland Medical Center",
+"email_address": null,
+"ip_addresses": [],
+"established": 1942,
+"types": [
+"Healthcare"
+],
+"relationships": [
+{
+"label": "Mills College",
+"type": "Related",
+"id": "https://ror.org/01ynb8e46"
+},
+{
+"label": "University of California, Berkeley",
+"type": "Related",
+"id": "https://ror.org/01an7q238"
+},
+{
+"label": "Kaiser Permanente",
+"type": "Parent",
+"id": "https://ror.org/00t60zh31"
+}
+],
+"addresses": [
+{
+"lat": 37.823547,
+"lng": -122.258531,
+"state": "California",
+"state_code": "US-CA",
+"city": "Oakland",
+"geonames_city": {
+"id": 5378538,
+"city": "Oakland",
+"geonames_admin1": {
+"name": "California",
+"id": 5332921,
+"ascii_name": "California",
+"code": "US.CA"
+},
+"geonames_admin2": {
+"name": "Alameda County",
+"id": 5322745,
+"ascii_name": "Alameda County",
+"code": "US.CA.001"
+},
+"license": {
+"attribution": "Data from geonames.org under a CC-BY 3.0 license",
+"license": "http://creativecommons.org/licenses/by/3.0/"
+},
+"nuts_level1": {
+"name": null,
+"code": null
+},
+"nuts_level2": {
+"name": null,
+"code": null
+},
+"nuts_level3": {
+"name": null,
+"code": null
+}
+},
+"postcode": null,
+"primary": false,
+"line": null,
+"country_geonames_id": 6252001
+}
+],
+"links": [
+"https://mydoctor.kaiserpermanente.org/ncal/facilities/region/eastbay/area_master/about_us/oakland/"
+],
+"aliases": [
+"Kaiser Oakland"
+],
+"acronyms": [],
+"status": "active",
+"wikipedia_url": "https://en.wikipedia.org/wiki/Oakland_Medical_Center",
+"labels": [],
+"country": {
+"country_name": "United States",
+"country_code": "US"
+},
+"external_ids": {
+"ISNI": {
+"preferred": null,
+"all": [
+"0000 0004 0445 0201"
+]
+},
+"Wikidata": {
+"preferred": null,
+"all": [
+"Q7074025"
+]
+},
+"GRID": {
+"preferred": "grid.414886.7",
+"all": "grid.414886.7"
+}
+}
+}
