@@ -1,0 +1,115 @@
+{
+"id": "https://ror.org/05m3qrs33",
+"name": "Ipswich Hospital",
+"email_address": null,
+"ip_addresses": [],
+"established": 1910,
+"types": [
+"Healthcare"
+],
+"relationships": [
+{
+"label": "University of Cambridge",
+"type": "Related",
+"id": "https://ror.org/013meh722"
+},
+{
+"label": "University of East Anglia",
+"type": "Related",
+"id": "https://ror.org/026k5mg93"
+},
+{
+"label": "University of Essex",
+"type": "Related",
+"id": "https://ror.org/02nkf1q06"
+},
+{
+"label": "East Suffolk and North Essex NHS Foundation Trust",
+"type": "Parent",
+"id": "https://ror.org/019g08z42"
+}
+],
+"addresses": [
+{
+"lat": 52.057783,
+"lng": 1.198587,
+"state": null,
+"state_code": null,
+"city": "Ipswich",
+"geonames_city": {
+"id": 2646057,
+"city": "Ipswich",
+"geonames_admin1": {
+"name": "England",
+"id": 6269131,
+"ascii_name": "England",
+"code": "GB.ENG"
+},
+"geonames_admin2": {
+"name": "Suffolk",
+"id": 2636561,
+"ascii_name": "Suffolk",
+"code": "GB.ENG.N5"
+},
+"license": {
+"attribution": "Data from geonames.org under a CC-BY 3.0 license",
+"license": "http://creativecommons.org/licenses/by/3.0/"
+},
+"nuts_level1": {
+"name": "EAST OF ENGLAND",
+"code": "UKH"
+},
+"nuts_level2": {
+"name": "East Anglia",
+"code": "UKH1"
+},
+"nuts_level3": {
+"name": "Suffolk",
+"code": "UKH14"
+}
+},
+"postcode": null,
+"primary": false,
+"line": null,
+"country_geonames_id": 2635167
+}
+],
+"links": [
+"https://www.esneft.nhs.uk/your-visit/our-wards/ipswich-wards/"
+],
+"aliases": [
+"East Suffolk and Ipswich Hospital"
+],
+"acronyms": [],
+"status": "active",
+"wikipedia_url": "https://en.wikipedia.org/wiki/Ipswich_Hospital",
+"labels": [],
+"country": {
+"country_name": "United Kingdom",
+"country_code": "GB"
+},
+"external_ids": {
+"ISNI": {
+"preferred": null,
+"all": [
+"0000 0004 0399 2412"
+]
+},
+"OrgRef": {
+"preferred": null,
+"all": [
+"8767645"
+]
+},
+"Wikidata": {
+"preferred": null,
+"all": [
+"Q14956760"
+]
+},
+"GRID": {
+"preferred": "grid.414810.8",
+"all": "grid.414810.8"
+}
+}
+}
