@@ -3,6 +3,10 @@ import os
 import sys
 import subprocess
 
+# TODO: invocation becomes its own function that can be used everywhere
+
+# TODO: Invalid types of inputs, i.e. various types of schema invalidations, various types of validation test failures
+
 def valid_input():
     return ["tests/fixtures/valid/015m7wh34.json","tests/fixtures/valid"]
 
