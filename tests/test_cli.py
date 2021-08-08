@@ -33,3 +33,11 @@ def test_valid_all_args():
     path = valid_file_path()
     o_args = run_optional_args(s = schema, p = path)
     run_valid_args(o_args)
+
+def test_invalid_args():
+    """This test sends an invalid argument"""
+    bad_command = ["python", "run_validations.py", "-r", "test"]
+    out, err, exitcode = capture(bad_command)
+    assert exitcode == 2
+    assert out == b''
+    assert err == b'usage: run_validations.py [-h] -i INPUT [-s SCHEMA] [-p FILE_PATH]\nrun_validations.py: error: the following arguments are required: -i/--input\n'
