@@ -3,4 +3,3 @@ requests==2.23.0
 validators==0.18.2
 pycountry==20.7.3
 pytest==6.2.4
-click==8.0.1
