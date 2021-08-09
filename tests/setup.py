@@ -16,6 +16,9 @@ def valid_file_path():
 def schema_fixture():
     return "tests/fixtures/schema/v1/ror_schema.json"
 
+def invocation(arg = "-i"):
+    return ["python", "run_validations.py", arg]
+
 def capture(command):
     proc = subprocess.Popen(command,
         stdout = subprocess.PIPE,
@@ -35,12 +38,6 @@ def run_optional_args(**optional_args):
         altered_keys = ["-" + k for k in optional_args.keys()]
         fixed_args = dict(zip(altered_keys, list(optional_args.values())))
         return flatten(list(fixed_args.items()))
-
-def run_args(input, optional_args = []):
-    invocation = ["python", "run_validations.py","-i"]
-    command = [*invocation, input, *optional_args]
-    out, err, exitcode = capture(command)
-    return out, err, exitcode
 
 def valid_input():
     return ["tests/fixtures/valid/015m7wh34.json","tests/fixtures/valid"]
@@ -64,8 +61,7 @@ def run_optional_args(**optional_args):
         return flatten(list(fixed_args.items()))
 
 def run_args(input, optional_args = []):
-    invocation = ["python", "run_validations.py","-i"]
-    command = [*invocation, input, *optional_args]
+    command = [*invocation(), input, *optional_args]
     out, err, exitcode = capture(command)
     return out, err, exitcode
 
