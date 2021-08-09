@@ -16,8 +16,8 @@
 ],
 "addresses": [
 {
-"lat": 37.808283,
-"lng": -122.267508,
+"lat": 37.80437,
+"lng": -122.2708,
 "state": "California",
 "state_code": "US-CA",
 "city": "Oakland",
@@ -31,9 +31,9 @@
 "code": "US.CA"
 },
 "geonames_admin2": {
-"name": "Alameda County",
+"name": "Alameda",
 "id": 5322745,
-"ascii_name": "Alameda County",
+"ascii_name": "Alameda",
 "code": "US.CA.001"
 },
 "license": {

@@ -1,6 +1,5 @@
 import json
 import sys
-import jsonschema
 import requests
 import validators
 import pycountry
