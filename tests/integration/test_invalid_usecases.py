@@ -12,9 +12,9 @@ def invalid_files(key):
     return invalid[key]
 
 
-def test_invalid_estdate_length(invalid_estdate_length):
+def test_invalid_established_date(invalid_established_date):
     """This test sends an invalid file which passes the schema but has an invalid established date length."""
     file = invalid_files("invalid_established_date")
     out, err, exitcode = run_args(file)
     assert exitcode == 1
-    assert out == invalid_estdate_length
+    assert out == invalid_established_date

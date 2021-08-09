@@ -7,6 +7,7 @@ import pycountry
 import validate.utilities as u
 import validate.helpers as vh
 import validate.relationships as vr
+import datetime as dt
 
 class Validate_Tests:
     def __init__(self,file):
@@ -69,8 +70,7 @@ class Validate_Tests:
         name = str(self.check_established_year.__name__)
         yr = vh.File['established']
         msg = None
-        year_length = len(str(yr)) if isinstance(yr, int) else None
-        if year_length and (not(year_length > 2 and year_length < 5)):
+        if isinstance(yr, int) and (yr <= 99 or yr >= dt.date.today().year):
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
         return vh.handle_check(name,msg)
 
