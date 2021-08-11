@@ -19,7 +19,7 @@ To run it with docker, please do the following:
   * `docker exec validate python run_validations.py -i tests/fixtures/valid/015m7wh34.json -p tests/fixtures/valid`. This validates one file and checks the path listed for other files that will be listed in relationships of the file being validated, if they exist.
 * To see what arguments are needed for the script, do the following:
 ```
-$ docker exec validate python run_validation.py -h
+$ docker exec validate python run_validations.py -h
 usage: run_validation.py [-h] -i INPUT [-s SCHEMA] [-p FILE_PATH]
 Script to validate ROR files
 optional arguments:
