@@ -9,7 +9,7 @@ from copy import deepcopy
 File = None
 
 def handle_check(name,msg=None):
-    # all the validator message use this pattern
+    # all the validator messages use this pattern
     message = {}
     if msg:
         message[name] = {'status':msg}
@@ -24,6 +24,7 @@ def validate_url(url):
     return msg
 
 def check_country(geonames_response):
+    # checks country code and country name
     country_check = {}
     geonames_country_code = geonames_response['countryCode']
     record_country_code = File['country']['country_code']

@@ -14,6 +14,8 @@ def schema_type(schema):
         raise Exception(f"{schema} must either be a file or a url")
 
 def validate_file(file,schema):
+    """ checks if schema is sent and if so, retrieving the schema depending on its type and validating the file against it"""
+    
     if schema:
         stype = schema_type(schema)
     arg_exists(file)

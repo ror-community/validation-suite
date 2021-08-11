@@ -8,6 +8,8 @@ info = {"file_path": None, "record_info": None}
 errors = []
 
 def rel_pair_validator(label):
+    """Setting up the relationship pairs for relationship types"""
+
     p = "Parent"
     c = "Child"
     r = "Related"
@@ -16,6 +18,7 @@ def rel_pair_validator(label):
 
 
 def rel_values_mapping():
+    """Setting up the relationship pairs for institution names"""
     return {"label": "name", "id": "id"}
 
 
@@ -30,7 +33,7 @@ def validate_relationship(file_rel, related_rel):
     if not (paired_value == related_rel['related_relationship']['type']):
         err[related_rel['id']].append(f"Illegal relationship pairing: relationship type: {related_rel['related_relationship']['type']} should be {paired_value}")
 
-    # Values from relationships must equal each other
+    # Names of related institutions must equal each other
     mappings = rel_values_mapping()
     for k, v in mappings.items():
         if not (file_rel[k] == related_rel[v]) or not (

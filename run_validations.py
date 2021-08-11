@@ -9,6 +9,7 @@ import json
 import pathlib
 
 def set_args():
+    """CLI"""
     parser = argparse.ArgumentParser(
                     description="Script to validate ROR files")
     parser.add_argument('-i', '--input', help='Path to one file or one directory for validation', required=True)
@@ -18,6 +19,7 @@ def set_args():
     return args
 
 def run_validation_tests(file, path=None):
+    """Runs validation tests on a file"""
     try:
         with open(file, 'r') as f:
             data = json.load(f)
@@ -28,6 +30,7 @@ def run_validation_tests(file, path=None):
     return validation_errors
 
 def print_errors(errors,validation_errors):
+    """Printing all errors picked up through the tests"""
     for msg in errors:
         validation_errors = True
         for filename, err in msg.items():
@@ -42,6 +45,7 @@ def print_errors(errors,validation_errors):
     return validation_errors
 
 def get_files(input):
+    """Gathers files or files in a directory for processing"""
     files = []
     if os.path.isfile(input):
         files.append(input)
@@ -56,6 +60,7 @@ def get_files(input):
     return files
 
 def validate(input, path = None, schema = None):
+    """Runs the files against the schema validator and the class that checks the usecases"""
     files = get_files(input)
     filename = ""
     validation_errors = False

@@ -46,6 +46,7 @@ class Validate_Tests:
         if geonames_response:
             mapped_fields = vh.mapped_geoname_record()
             compare = vh.compare_ror_geoname(mapped_fields,address,geonames_response,{})
+            #compares the country in the record against the response
             country_test = vh.check_country(geonames_response)
             if country_test:
                 compare.update(country_test)
@@ -84,6 +85,7 @@ class Validate_Tests:
             validate = getattr(self, methods)
             results.append(validate())
         if file_path:
+            # if relationship is being checked
             rel = vh.get_relationship_info()
             if rel['rel']:
                 vr.info = {"file_path":file_path,"record_info":rel}
@@ -92,5 +94,3 @@ class Validate_Tests:
                     results.append({'relationships':msg})
         results = list(filter(None,results))
         return results
-
-# write tests
