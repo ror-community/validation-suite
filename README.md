@@ -41,7 +41,7 @@ optional arguments:
    #- mount additional test files here. Ex:
    #-path/on/local/machine/ror-files:/path/in/container/ror-files
    ```
-   * An example of running the script against a directory:`docker exec validate python run_validations.py -i tests/fixtures/invalid/usecases-issues`
+   * An example of running the script against a directory that has invalid files:`docker exec validate python run_validations.py -i tests/fixtures/invalid/usecase-issues`
 * If a file is invalid, the script will print out the errors to stdout and will have an exit code of 1. If the file passes validation, the exit code will be 0.
 
 * To look at the output of a file that is validates incorrectly against the schema, run this as an example: `docker exec validate python run_validations.py -i tests/fixtures/invalid/schema-issues/enum_values/bad-relationship-type.json`
