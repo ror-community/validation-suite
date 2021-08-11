@@ -16,18 +16,8 @@ def invocation(arg = "-i"):
     return ["python", "run_validations.py", arg]
 
 def capture(command):
-    print("COMMAND: ", command)
     process = subprocess.run(command, capture_output=True, encoding="utf-8")
     return process.stdout, process.stderr, process.returncode
-
-def capture2(command):
-    proc = subprocess.Popen(command,
-        stdout = subprocess.PIPE,
-        stderr = subprocess.PIPE,
-    )
-    out,err = proc.communicate()
-    print("OUT: ", out)
-    return out, err, proc.returncode
 
 def flatten(nested_list):
     return [final_list for t in nested_list for final_list in t]
@@ -69,10 +59,3 @@ def run_args(input, optional_args = []):
     command = [*invocation(), input, *optional_args]
     out, err, exitcode = capture(command)
     return out, err, exitcode
-
-def run_valid_args(optional_args = []):
-    for i in valid_input():
-        out, err, exitcode = run_args(i, optional_args)
-        assert exitcode == 0
-        assert out == b'VALID\n'
-        assert err == b''
