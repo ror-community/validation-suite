@@ -16,7 +16,7 @@ To run it with docker, please do the following:
 * Make sure docker and docker-compose are installed
 * For a demo run, do the following:
   * `docker-compose up -d`
-  * `docker exec validate python run_validation.py -i ror-files/valid/015m7wh34.json -p ror-files/valid`. This validates one file and checks the path listed for other files that will be listed in relationships of the file being validated, if they exist.
+  * `docker exec validate python run_validations.py -i tests/fixtures/valid/015m7wh34.json -p tests/fixtures/valid`. This validates one file and checks the path listed for other files that will be listed in relationships of the file being validated, if they exist.
 * To see what arguments are needed for the script, do the following:
 ```
 $ docker exec validate python run_validation.py -h
@@ -41,5 +41,9 @@ optional arguments:
    #- mount additional test files here. Ex:
    #-path/on/local/machine/ror-files:/path/in/container/ror-files
    ```
-   * An example of running the script against a directory:`docker exec validate python run_validation.py -i test-files/invalid`
+   * An example of running the script against a directory:`docker exec validate python run_validations.py -i tests/fixtures/invalid/usecases-issues`
 * If a file is invalid, the script will print out the errors to stdout and will have an exit code of 1. If the file passes validation, the exit code will be 0.
+
+* To look at the output of a file that is validates incorrectly against the schema, run this as an example: `docker exec validate python run_validations.py -i tests/fixtures/invalid/schema-issues/enum_values/bad-relationship-type.json`
+
+* To run tests, please do the following: `docker exec validate pytest tests/integration/`. This is assuming that `docker-compose up -d` has already been run. If not, please run this first.

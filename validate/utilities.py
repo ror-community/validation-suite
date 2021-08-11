@@ -3,6 +3,7 @@ import zipfile
 import requests
 import json
 import sys
+import validators
 
 DEFAULT_SCHEMA = "https://raw.githubusercontent.com/ror-community/ror-schema/master/ror_schema.json"
 API_URL = "https://api.ror.org/organizations"

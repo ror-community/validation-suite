@@ -10,7 +10,7 @@
   "relationships": [
     {
       "label": "Centre Hospitalier Universitaire de Rennes",
-      "type": "Realated",
+      "type": "Sibling",
       "id": "https://ror.org/05qec5a53"
     },
     {

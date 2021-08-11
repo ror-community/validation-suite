@@ -1,12 +1,12 @@
 import json
 import sys
-import jsonschema
 import requests
 import validators
 import pycountry
 import validate.utilities as u
 import validate.helpers as vh
 import validate.relationships as vr
+import datetime as dt
 
 class Validate_Tests:
     def __init__(self,file):
@@ -46,6 +46,7 @@ class Validate_Tests:
         if geonames_response:
             mapped_fields = vh.mapped_geoname_record()
             compare = vh.compare_ror_geoname(mapped_fields,address,geonames_response,{})
+            #compares the country in the record against the response
             country_test = vh.check_country(geonames_response)
             if country_test:
                 compare.update(country_test)
@@ -69,8 +70,7 @@ class Validate_Tests:
         name = str(self.check_established_year.__name__)
         yr = vh.File['established']
         msg = None
-        year_length = len(str(yr)) if isinstance(yr, int) else None
-        if year_length and (not(year_length > 2 and year_length < 5)):
+        if isinstance(yr, int) and (yr <= 99 or yr >= dt.date.today().year):
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
         return vh.handle_check(name,msg)
 
@@ -85,6 +85,7 @@ class Validate_Tests:
             validate = getattr(self, methods)
             results.append(validate())
         if file_path:
+            # if relationship is being checked
             rel = vh.get_relationship_info()
             if rel['rel']:
                 vr.info = {"file_path":file_path,"record_info":rel}
@@ -93,5 +94,3 @@ class Validate_Tests:
                     results.append({'relationships':msg})
         results = list(filter(None,results))
         return results
-
-# write tests
