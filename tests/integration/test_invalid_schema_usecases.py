@@ -13,7 +13,7 @@ def invalid_fixture_path():
 
 def invalid_sub_folders():
     dirs = {"missing_fields": "missing_fields/",
-               "incorrect_enum_values": "enum_values/"}
+            "incorrect_enum_values": "enum_values/"}
     return dirs
 
 def required_fields():
@@ -77,4 +77,17 @@ def test_missing_fields():
         out, err, exitcode = run_command(fname, d)
         result = re.search(rf"\'{rf}.*?property", out, re.MULTILINE)
         assert result.group() == f"'{rf}' is a required property"
+        assert exitcode == 1
+
+def test_enum_values():
+    sub_folders = invalid_sub_folders()
+    dir = invalid_fixture_path() + sub_folders["incorrect_enum_values"]
+    files = os.listdir(dir)
+    schema = schema_fixture()
+    o_args = run_optional_args(s = schema)
+    for f in files:
+        full_path = os.path.join(dir, f)
+        out, err, exitcode = run_args(full_path, o_args)
+        result = re.search(r"SCHEMA ERROR", out, re.MULTILINE)
+        assert bool(result) is True
         assert exitcode == 1
