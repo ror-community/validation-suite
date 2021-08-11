@@ -4,7 +4,7 @@ import sys
 import subprocess
 import copy
 from ..setup import *
-from ..fixture import *
+from ..fixtures import *
 import json
 import re
 
@@ -71,6 +71,7 @@ def test_missing_fields():
     data = read_file()
     path = invalid_sub_folders()
     for rf in required_fields():
+        print(f"Testing: missing {rf}\n")
         new_data = {**data}
         d = missing_field(rf, new_data)
         fname = f"{path['missing_fields']}/{rf}.json"
@@ -78,7 +79,7 @@ def test_missing_fields():
         result = re.search(rf"\'{rf}.*?property", out, re.MULTILINE)
         assert result.group() == f"'{rf}' is a required property"
         assert exitcode == 1
-
+    
 def test_enum_values():
     sub_folders = invalid_sub_folders()
     dir = invalid_fixture_path() + sub_folders["incorrect_enum_values"]
