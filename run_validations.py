@@ -84,34 +84,6 @@ def validate(input, path = None, schema = None):
         print("VALID")
         exit(0)
 
-def validate2(input, path = None, schema = None):
-    files = get_files(input)
-    filename = ""
-    validation_errors = False
-    errors = []
-    for f in files:
-        messages = {}
-        filename = os.path.basename(f).split(".")[0]
-        valid, msg = vs.validate_file(f,schema)
-        if valid:
-            messages[filename] = run_validation_tests(f,path)
-            if len(messages[filename]) == 0:
-                messages[filename] = None
-        else:
-            messages[filename] = msg
-
-        if messages[filename]:
-            errors.append(deepcopy(messages))
-
-    if len(errors) > 0:
-        validation_errors = print_errors(errors, validation_errors)
-
-    if validation_errors:
-        exit(1)
-    else:
-        print("VALID")
-        exit(0)
-
 def main():
     args = set_args()
     schema = args.schema if args.schema else None

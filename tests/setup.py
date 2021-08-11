@@ -3,10 +3,6 @@ import os
 import sys
 import subprocess
 
-# TODO: invocation becomes its own function that can be used everywhere
-
-# TODO: Invalid types of inputs, i.e. various types of schema invalidations, various types of validation test failures. Cover all use cases
-
 def valid_input():
     return ["tests/fixtures/valid/015m7wh34.json","tests/fixtures/valid"]
 
@@ -20,11 +16,17 @@ def invocation(arg = "-i"):
     return ["python", "run_validations.py", arg]
 
 def capture(command):
+    print("COMMAND: ", command)
+    process = subprocess.run(command, capture_output=True, encoding="utf-8")
+    return process.stdout, process.stderr, process.returncode
+
+def capture2(command):
     proc = subprocess.Popen(command,
         stdout = subprocess.PIPE,
         stderr = subprocess.PIPE,
     )
     out,err = proc.communicate()
+    print("OUT: ", out)
     return out, err, proc.returncode
 
 def flatten(nested_list):
@@ -47,6 +49,9 @@ def valid_file_path():
 
 def schema_fixture():
     return "tests/fixtures/schema/v1/ror_schema.json"
+
+def fixture_file_schema():
+    return "tests/fixtures/invalid/schema-issues/skeleton.json"
 
 def flatten(nested_list):
     return [final_list for t in nested_list for final_list in t]
