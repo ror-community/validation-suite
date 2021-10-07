@@ -1,0 +1,86 @@
+{
+  "external_ids": {
+    "Wikidata": {
+      "all": [],
+      "preferred": null
+    },
+    "OrgRef": {
+      "all": [],
+      "preferred": null
+    },
+    "ISNI": {
+      "all": [],
+      "preferred": null
+    },
+    "GRID": {
+      "preferred": null,
+      "all": null
+    }
+  },
+  "relationships": [],
+  "status": "active",
+  "links": [],
+  "acronyms": [
+    "CSCCE"
+  ],
+  "aliases": [],
+  "labels": [],
+  "country": {
+    "country_name": "United States",
+    "country_code": "US"
+  },
+  "types": [
+    "Nonprofit"
+  ],
+  "addresses": [
+    {
+      "primary": false,
+      "geonames_city": {
+        "nuts_level3": {
+          "name": null,
+          "code": null
+        },
+        "nuts_level2": {
+          "name": null,
+          "code": null
+        },
+        "nuts_level1": {
+          "name": null,
+          "code": null
+        },
+        "geonames_admin2": {
+          "code": "US.CA.001",
+          "id": "5322745",
+          "name": "Alameda",
+          "ascii_name": "Alameda"
+        },
+        "geonames_admin1": {
+          "code": "US.CA",
+          "id": "5332921",
+          "name": "California",
+          "ascii_name": "California"
+        },
+        "license": {
+          "license": "http://creativecommons.org/licenses/by/3.0/",
+          "attribution": "Data from geonames.org under a CC-BY 3.0 license"
+        },
+        "id": 5378538,
+        "city": "Oakland"
+      },
+      "state_code": null,
+      "state": null,
+      "postcode": null,
+      "line": null,
+      "lat": "37.80437",
+      "lng": "-122.2708",
+      "city": "Oakland",
+      "country_geonames_id": "6252001"
+    }
+  ],
+  "id": "https://ror.org/012xzy7a9",
+  "email_address": null,
+  "ip_addresses": [],
+  "established": null,
+  "wikipedia_url": "",
+  "name": "Center for Scientific Collaboration and Community Engagement "
+}

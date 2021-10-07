@@ -1,0 +1,88 @@
+{
+  "external_ids": {
+    "Wikidata": {
+      "all": [],
+      "preferred": null
+    },
+    "OrgRef": {
+      "all": [],
+      "preferred": null
+    },
+    "ISNI": {
+      "all": [
+        "0000000119582731"
+      ],
+      "preferred": "0000000119582731"
+    },
+    "GRID": {
+      "preferred": null,
+      "all": null
+    }
+  },
+  "relationships": [],
+  "status": "active",
+  "links": [
+    "https://cse.umn.edu/mgs"
+  ],
+  "acronyms": [],
+  "aliases": [],
+  "labels": [],
+  "country": {
+    "country_name": "United States",
+    "country_code": "US"
+  },
+  "types": [
+    "Government"
+  ],
+  "addresses": [
+    {
+      "primary": false,
+      "geonames_city": {
+        "nuts_level3": {
+          "name": null,
+          "code": null
+        },
+        "nuts_level2": {
+          "name": null,
+          "code": null
+        },
+        "nuts_level1": {
+          "name": null,
+          "code": null
+        },
+        "geonames_admin2": {
+          "code": "US.MN.123",
+          "id": "5042563",
+          "name": "Ramsey",
+          "ascii_name": "Ramsey"
+        },
+        "geonames_admin1": {
+          "code": "US.MN",
+          "id": "5037779",
+          "name": "Minnesota",
+          "ascii_name": "Minnesota"
+        },
+        "license": {
+          "license": "http://creativecommons.org/licenses/by/3.0/",
+          "attribution": "Data from geonames.org under a CC-BY 3.0 license"
+        },
+        "id": 5045360,
+        "city": "Saint Paul"
+      },
+      "state_code": null,
+      "state": null,
+      "postcode": null,
+      "line": null,
+      "lat": "44.94441",
+      "lng": "-93.09327",
+      "city": "Saint Paul",
+      "country_geonames_id": "6252001"
+    }
+  ],
+  "id": "https://ror.org/012xzy7a9",
+  "email_address": null,
+  "ip_addresses": [],
+  "established": 1872,
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Minnesota_Geological_Survey",
+  "name": "Minnesota Geological Survey"
+}
