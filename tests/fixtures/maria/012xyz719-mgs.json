@@ -73,8 +73,8 @@
       "state": null,
       "postcode": null,
       "line": null,
-      "lat": "44.94441",
-      "lng": "-93.09327",
+      "lat": 44.94441,
+      "lng": -93.09327,
       "city": "Saint Paul",
       "country_geonames_id": "6252001"
     }
