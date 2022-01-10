@@ -93,7 +93,8 @@ def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
         # If value is of dict type then print
         # all key-value pairs in the nested dictionary
         if isinstance(value, dict):
-            compare_ror_geoname(value,ror_address[key],geonames_response,compare)
+            if key in ror_address:
+                compare_ror_geoname(value,ror_address[key],geonames_response,compare)
         else:
             _,original_address = get_record_address()
             ror_value = ror_address[key] if key in ror_address else original_address[key]

@@ -24,12 +24,34 @@
 "geonames_city": {
 "id": 3714280,
 "city": "Barro Colorado Island",
-"geonames_admin1": null,
-"geonames_admin2": null,
-"license": null,
-"nuts_level1": null,
-"nuts_level2": null,
-"nuts_level3": null
+"geonames_admin1": {
+"name": null,
+"id": null,
+"ascii_name": null,
+"code": null
+},
+"geonames_admin2": {
+"name": null,
+"id": null,
+"ascii_name": null,
+"code": null
+},
+"license": {
+"attribution": "Data from geonames.org under a CC-BY 3.0 license",
+"license": "http://creativecommons.org/licenses/by/3.0/"
+},
+"nuts_level1": {
+"name": null,
+"code": null
+},
+"nuts_level2": {
+"name": null,
+"code": null
+},
+"nuts_level3": {
+"name": null,
+"code": null
+}
 },
 "postcode": null,
 "primary": false,
