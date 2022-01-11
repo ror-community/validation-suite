@@ -1,7 +1,9 @@
 {
   "external_ids": {
     "Wikidata": {
-      "all": [],
+      "all": [
+        "https://www.wikidata.org/wiki/Q2382930"
+      ],
       "preferred": null
     },
     "OrgRef": {
@@ -9,10 +11,8 @@
       "preferred": null
     },
     "ISNI": {
-      "all": [
-        "0000000119582731"
-      ],
-      "preferred": "0000000119582731"
+      "all": [],
+      "preferred": null
     },
     "GRID": {
       "preferred": null,
@@ -22,14 +22,19 @@
   "relationships": [],
   "status": "active",
   "links": [
-    "https://cse.umn.edu/mgs"
+    "http://www.tsoukenation.com/"
   ],
   "acronyms": [],
-  "aliases": [],
+  "aliases": [
+    "Sooke",
+    "Tsouke",
+    "T'souke",
+    "Tsou-ke"
+  ],
   "labels": [],
   "country": {
-    "country_name": "United States",
-    "country_code": "US"
+    "country_name": "Canada",
+    "country_code": "CA"
   },
   "types": [
     "Government"
@@ -51,38 +56,38 @@
           "code": null
         },
         "geonames_admin2": {
-          "code": "US.MN.123",
-          "id": "5042563",
-          "name": "Ramsey",
-          "ascii_name": "Ramsey"
+          "code": "CA.02.5917",
+          "id": "5916420",
+          "name": "Capital Regional District",
+          "ascii_name": "Capital Regional District"
         },
         "geonames_admin1": {
-          "code": "US.MN",
-          "id": "5037779",
-          "name": "Minnesota",
-          "ascii_name": "Minnesota"
+          "code": "CA.02",
+          "id": "5909050",
+          "name": "British Columbia",
+          "ascii_name": "British Columbia"
         },
         "license": {
           "license": "http://creativecommons.org/licenses/by/3.0/",
           "attribution": "Data from geonames.org under a CC-BY 3.0 license"
         },
-        "id": 5045360,
-        "city": "Saint Paul"
+        "id": 6151264,
+        "city": "Sooke"
       },
       "state_code": null,
       "state": null,
       "postcode": null,
       "line": null,
-      "lat": 44.94441,
-      "lng": -93.09327,
-      "city": "Saint Paul",
-      "country_geonames_id": "6252001"
+      "lat": "48.37463",
+      "lng": "-123.72762",
+      "city": "Sooke",
+      "country_geonames_id": "6251999"
     }
   ],
   "id": "https://ror.org/012xzy7a9",
   "email_address": null,
   "ip_addresses": [],
-  "established": 1872,
-  "wikipedia_url": "https://en.wikipedia.org/wiki/Minnesota_Geological_Survey",
-  "name": "Minnesota Geological Survey"
+  "established": null,
+  "wikipedia_url": "https://en.wikipedia.org/wiki/T%27Sou-ke_Nation",
+  "name": "T'Sou-ke First Nation"
 }

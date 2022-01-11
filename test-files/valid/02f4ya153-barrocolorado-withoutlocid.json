@@ -1,0 +1,71 @@
+{
+"id": "https://ror.org/02f4ya153",
+"name": "Barro Colorado Island",
+"email_address": null,
+"ip_addresses": [],
+"established": 1914,
+"types": [
+"Facility"
+],
+"relationships": [
+{
+"label": "Smithsonian Tropical Research Institute",
+"type": "Parent",
+"id": "https://ror.org/035jbxr46"
+}
+],
+"addresses": [
+{
+"lat": 9.052035,
+"lng": -79.622722,
+"state": null,
+"state_code": null,
+"city": "Barro Colorado Island",
+"geonames_city": {
+"id": null,
+"city": null,
+"geonames_admin1": null,
+"geonames_admin2": null,
+"license": null,
+"nuts_level1": null,
+"nuts_level2": null,
+"nuts_level3": null
+},
+"postcode": null,
+"primary": false,
+"line": null,
+"country_geonames_id": 3703430
+}
+],
+"links": [
+"https://stri.si.edu/facility/barro-colorado"
+],
+"aliases": [],
+"acronyms": [
+"BCI"
+],
+"status": "active",
+"wikipedia_url": "https://en.wikipedia.org/wiki/Barro_Colorado_Island",
+"labels": [
+{
+"label": "Isla Barro Colorado",
+"iso639": "es"
+}
+],
+"country": {
+"country_name": "Panama",
+"country_code": "PA"
+},
+"external_ids": {
+"Wikidata": {
+"preferred": null,
+"all": [
+"Q808962"
+]
+},
+"GRID": {
+"preferred": "grid.507884.6",
+"all": "grid.507884.6"
+}
+}
+}
