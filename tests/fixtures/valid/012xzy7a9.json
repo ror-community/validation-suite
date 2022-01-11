@@ -2,19 +2,17 @@
   "external_ids": {
     "Wikidata": {
       "all": [
-        "Q6044782"
+        "https://www.wikidata.org/wiki/Q2382930"
       ],
-      "preferred": "Q6044782"
+      "preferred": null
     },
     "OrgRef": {
       "all": [],
       "preferred": null
     },
     "ISNI": {
-      "all": [
-        "0000000109435850"
-      ],
-      "preferred": "0000000109435850"
+      "all": [],
+      "preferred": null
     },
     "GRID": {
       "preferred": null,
@@ -24,19 +22,22 @@
   "relationships": [],
   "status": "active",
   "links": [
-    "https://www.icpsr.umich.edu/"
+    "http://www.tsoukenation.com/"
   ],
-  "acronyms": [
-    "ICPSR"
+  "acronyms": [],
+  "aliases": [
+    "Sooke",
+    "Tsouke",
+    "T'souke",
+    "Tsou-ke"
   ],
-  "aliases": [],
   "labels": [],
   "country": {
-    "country_name": "United States",
-    "country_code": "US"
+    "country_name": "Canada",
+    "country_code": "CA"
   },
   "types": [
-    "Other"
+    "Government"
   ],
   "addresses": [
     {
@@ -55,39 +56,38 @@
           "code": null
         },
         "geonames_admin2": {
-          "code": "US.MI.161",
-          "id": "5014120",
-          "name": "Washtenaw",
-          "ascii_name": "Washtenaw"
+          "code": "CA.02.5917",
+          "id": "5916420",
+          "name": "Capital Regional District",
+          "ascii_name": "Capital Regional District"
         },
         "geonames_admin1": {
-          "code": "US.MI",
-          "id": "5001836",
-          "name": "Michigan",
-          "ascii_name": "Michigan"
+          "code": "CA.02",
+          "id": "5909050",
+          "name": "British Columbia",
+          "ascii_name": "British Columbia"
         },
         "license": {
           "license": "http://creativecommons.org/licenses/by/3.0/",
           "attribution": "Data from geonames.org under a CC-BY 3.0 license"
         },
-        "id": 4984247,
-        "city": "Ann Arbor"
+        "id": 6151264,
+        "city": "Sooke"
       },
       "state_code": null,
       "state": null,
       "postcode": null,
       "line": null,
-      "lat": "42.27756",
-      "lng": "-83.74088",
-      "city": "Ann Arbor",
-      "country_geonames_id": "6252001"
+      "lat": "48.37463",
+      "lng": "-123.72762",
+      "city": "Sooke",
+      "country_geonames_id": "6251999"
     }
   ],
   "id": "https://ror.org/012xzy7a9",
   "email_address": null,
   "ip_addresses": [],
-  "established": 1962,
-  "wikipedia_url": "https://en.wikipedia.org/wiki/Inter-university_Consortium_for_Political_and_Social_Research",
-  "name": "Inter-University Consortium for Political and Social Research"
+  "established": null,
+  "wikipedia_url": "https://en.wikipedia.org/wiki/T%27Sou-ke_Nation",
+  "name": "T'Sou-ke First Nation"
 }
-
