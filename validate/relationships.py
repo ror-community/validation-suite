@@ -70,18 +70,20 @@ def get_related_records(record_id):
                 data['id'], data['name'], data['relationships'])
         except Exception as e:
             print(f"Couldn't open file: {e}")
-    else:
-        errors.append (f"{filename} doesn't exist")
     return related_record
 
 
 def check_relationships():
+    files_exist = []
     for record in info['record_info']['rel']:
         related_relshp = get_related_records(record['id'])
         if related_relshp:
+            files_exist.append(record['id'])
             if related_relshp['related_relationship']:
-                msg = validate_relationship(record, related_relshp)
+                validate_relationship(record, related_relshp)
             else:
                 errors.append(
                     f"Related relationship not found for {related_relshp['id']}")
+    if len(files_exist) == 0:
+        errors.append(f"Relationships exist for {info['record_info']['id']}. At least one file listed in relationships must exist")    
     return errors
