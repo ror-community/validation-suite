@@ -69,7 +69,7 @@ def get_related_records(record_id):
             related_record = generate_related_relationships(
                 data['id'], data['name'], data['relationships'])
         except Exception as e:
-            print(f"Couldn't open file: {e}")
+            print(f"Couldn't open file {filename}: {e}")
     return related_record
 
 

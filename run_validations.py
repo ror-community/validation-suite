@@ -7,6 +7,10 @@ import os
 import sys
 import json
 import pathlib
+import logging
+
+ERROR_LOG = "validation_errors.log"
+logging.basicConfig(filename=ERROR_LOG,level=logging.ERROR, filemode='w')
 
 def set_args():
     """CLI"""
@@ -34,14 +38,15 @@ def print_errors(errors,validation_errors):
     for msg in errors:
         validation_errors = True
         for filename, err in msg.items():
-            print("FOR FILE: ", filename)
+            logging.error(f"FOR FILE: {filename}")
             if isinstance(err, list):
-                print("VALIDATION TEST ERRORS: \n")
+                logging.error("VALIDATION TEST ERRORS:")
                 for e in err:
                     for loc, message in e.items():
-                        print(f"In {loc}: {message}\n")
+                        logging.error(f"In {loc}: {message}")
             else:
-                print(f"SCHEMA ERROR:\n {err}")
+                logging.error("SCHEMA ERROR:")
+                logging.error(err)
     return validation_errors
 
 def get_files(input):
@@ -84,10 +89,11 @@ def validate(input, path = None, schema = None):
         validation_errors = print_errors(errors, validation_errors)
 
     if validation_errors:
-        exit(1)
+        with open(ERROR_LOG, 'r') as f:
+            print(f.read())
+        sys.exit(1)
     else:
-        print("VALID")
-        exit(0)
+        sys.exit(0)
 
 def main():
     args = set_args()
