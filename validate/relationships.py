@@ -158,5 +158,7 @@ def process_relationships(current_record, file_path, rel_file=None):
             info["record_info"] = rel
             info["errors"] = []
             msg = check_relationships()
+        else:
+            msg = "No relationships found, nothing to check"
     return msg
     
