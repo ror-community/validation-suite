@@ -5,8 +5,7 @@ from csv import DictReader
 from validate.utilities import *
 import validate.helpers as vh
 
-info = {"file_path": None, "record_info": None}
-errors = []
+info = {"file_path": None, "record_info": None, "errors": []}
 
 def rel_pair_validator(label):
     """Setting up the relationship pairs for relationship types"""
@@ -25,8 +24,6 @@ def rel_values_mapping():
 def validate_relationship(file_rel, related_rel):
     err = {}
     err[related_rel['id']] = []
-    org_id = info["record_info"]["id"]
-    org_name = info["record_info"]["name"]
     paired_value = rel_pair_validator(file_rel['type'])
 
     # Relationship type occur in pairs, they must equal the paired controlled vocabulary
@@ -41,7 +38,7 @@ def validate_relationship(file_rel, related_rel):
                 == info['record_info'][v]):
             err[related_rel['id']].append(f"Values are not equal: validating record: {info['record_info'][v]} and relationship: {file_rel} and related record: {related_rel}")
     if err[related_rel['id']]:
-        errors.append(err)
+        info["errors"].append(err)
 
 
 def generate_related_relationships(id, name, rel):
@@ -79,7 +76,7 @@ def parse_record_id(id):
     if ror_id:
         parsed_id = ror_id.group(1)
     else:
-        errors.append(f"ROR ID: {id} does not match format: {pattern}. Record will not be validated")
+        info["errors"].append(f"ROR ID: {id} does not match format: {pattern}. Record will not be validated")
     return parsed_id
 
 def read_relationship_from_file(rel_file):
@@ -114,22 +111,27 @@ def check_relationships_from_file(current_record, file_path, rel_file):
         if rel['rel']:
             info["file_path"] = file_path
             info["record_info"] = rel
+            info["errors"] = []
             all_current_id_relationships = list(i for i in chk_relshp if i['record_id'] == current_record['id'])
             for r in all_current_id_relationships:
                 file_rel = list(rel for rel in current_record['relationships'] if rel['id'] == r['related_id'])
                 file_rel = file_rel[0]
                 related_relshp = get_related_records(r['related_id'])
+                print("related: ", related_relshp)
                 if related_relshp:
                     files_exist.append(r['related_id'])
                     if related_relshp['related_relationship']:
                         validate_relationship(file_rel, related_relshp)
                     else:
-                        errors.append(
+                        info["errors"].append(
                         f"Related relationship not found for {related_relshp['id']}")
+            if len(files_exist) == 0:
+                info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. At least one file listed in relationships must exist")  
+        else:
+            info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. However, no relationships exist in the file")  
 
-    if len(files_exist) == 0:
-        errors.append(f"According to {rel_file}, relationships exist for {current_record['id']}. At least one file listed in relationships must exist")    
-    return errors
+  
+    return info["errors"]
 
 def check_relationships():
     files_exist = []
@@ -140,11 +142,11 @@ def check_relationships():
             if related_relshp['related_relationship']:
                 validate_relationship(record, related_relshp)
             else:
-                errors.append(
+                info["errors"].append(
                     f"Related relationship not found for {related_relshp['id']}")
     if len(files_exist) == 0:
-        errors.append(f"Relationships exist for {info['record_info']['id']}. At least one file listed in relationships must exist")    
-    return errors
+        info["errors"].append(f"Relationships exist for {info['record_info']['id']}. At least one file listed in relationships must exist")    
+    return info["errors"]
 
 def process_relationships(current_record, file_path, rel_file=None):
     msg = None
@@ -155,6 +157,7 @@ def process_relationships(current_record, file_path, rel_file=None):
         if rel['rel']:
             info["file_path"] = file_path
             info["record_info"] = rel
+            info["errors"] = []
             msg = check_relationships()
     return msg
     
