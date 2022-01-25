@@ -74,7 +74,7 @@ class Validate_Tests:
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
         return vh.handle_check(name,msg)
 
-    def validate_all(self,file_path=None):
+    def validate_all(self, file_path=None, rel_file=None):
         # calling all public methods in this class and removing the current method name.
         # This enables future public methods to be called automatically as well
         method_name = str(self.validate_all.__name__)
@@ -85,12 +85,9 @@ class Validate_Tests:
             validate = getattr(self, methods)
             results.append(validate())
         if file_path:
-            # if relationship is being checked
-            rel = vh.get_relationship_info()
-            if rel['rel']:
-                vr.info = {"file_path":file_path,"record_info":rel}
-                msg = vr.check_relationships()
-                if msg:
-                    results.append({'relationships':msg})
+             # if relationship is being checked
+            msg = vr.process_relationships(current_record = vh.File, file_path=file_path, rel_file=rel_file)
+            if msg:
+                results.append({'relationships':msg})
         results = list(filter(None,results))
         return results
