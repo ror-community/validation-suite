@@ -41,10 +41,10 @@ def mapped_geoname_record():
     ror_to_geoname = {
           "lat": "lat",
           "lng": "lng",
-          "city": "asciiName",
+          "city": "name",
           "geonames_city": {
             "id": "geonameId",
-            "city": "asciiName",
+            "city": "name",
             "geonames_admin1": {
                 "name": "adminName1",
                 "id": "adminId1",
