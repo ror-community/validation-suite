@@ -71,7 +71,7 @@ def get_related_records(record_id):
 
 def parse_record_id(id):
     parsed_id = None
-    pattern = '^https:\/\/ror.org\/(0[a-x|0-9]{8})$'
+    pattern = '^https:\/\/ror.org\/(0[a-z|0-9]{8})$'
     ror_id = re.search(pattern, id)
     if ror_id:
         parsed_id = ror_id.group(1)
@@ -149,6 +149,7 @@ def check_relationships():
 
 def process_relationships(current_record, file_path, rel_file=None):
     msg = None
+    info["errors"] = []
     if rel_file:
         msg = check_relationships_from_file(current_record, file_path, rel_file)
     else:
@@ -156,7 +157,6 @@ def process_relationships(current_record, file_path, rel_file=None):
         if rel['rel']:
             info["file_path"] = file_path
             info["record_info"] = rel
-            info["errors"] = []
             msg = check_relationships()
         else:
             msg = "No relationships found, nothing to check"
