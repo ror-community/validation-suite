@@ -70,7 +70,7 @@ class Validate_Tests:
         name = str(self.check_established_year.__name__)
         yr = vh.File['established']
         msg = None
-        if isinstance(yr, int) and (yr <= 99 or yr >= dt.date.today().year):
+        if isinstance(yr, int) and (yr <= 99 or yr > dt.date.today().year):
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
         return vh.handle_check(name,msg)
 
