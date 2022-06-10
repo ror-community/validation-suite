@@ -32,7 +32,7 @@ def check_country(geonames_response):
     record_country_name = File['country']['country_name']
     if geonames_country_code != record_country_code:
         print("Geonames country code different from record code for:")
-        prin(geonames_response)
+        print(geonames_response)
         country_check['country_code'] = {'ror': record_country_code, 'geonames': geonames_country_code}
     if geonames_country_name != record_country_name:
         country_check['country_name'] = {'ror': record_country_name, 'geonames': geonames_country_name}
