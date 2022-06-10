@@ -80,6 +80,7 @@ def validate(input, rel_file = None, path = None, schema = None):
     for f in files:
         messages = {}
         filename = os.path.basename(f).split(".")[0]
+        print(filename)
         valid = True
         valid, msg = vs.validate_file(f,schema)
         if valid:
