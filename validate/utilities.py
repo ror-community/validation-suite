@@ -11,7 +11,7 @@ API_URL = "https://api.ror.org/organizations"
 
 GEONAMES = {}
 GEONAMES['USER'] = "roradmin"
-GEONAMES['URL'] = 'http://api.geonames.org/getJSON'
+GEONAMES['URL'] = 'https://secure.geonames.net/getJSON'
 
 def url_validation(url):
     return validators.url(url)
