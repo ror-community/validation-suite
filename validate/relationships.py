@@ -13,7 +13,9 @@ def rel_pair_validator(label):
     p = "Parent"
     c = "Child"
     r = "Related"
-    pair = {p: c, c: p, r: r}
+    pr = "Predecessor"
+    s = "Successor"
+    pair = {p: c, c: p, r: r, pr: None, s: None}
     return pair.get(label, None)
 
 
@@ -26,9 +28,10 @@ def validate_relationship(file_rel, related_rel):
     err[related_rel['id']] = []
     paired_value = rel_pair_validator(file_rel['type'])
 
-    # Relationship type occur in pairs, they must equal the paired controlled vocabulary
-    if not (paired_value == related_rel['related_relationship']['type']):
-        err[related_rel['id']].append(f"Illegal relationship pairing: relationship type: {related_rel['related_relationship']['type']} should be {paired_value}")
+    if paired_value is not None:
+        # Some relationship types occur in pairs, they must equal the paired controlled vocabulary
+        if not (paired_value == related_rel['related_relationship']['type']):
+            err[related_rel['id']].append(f"Illegal relationship pairing: relationship type: {related_rel['related_relationship']['type']} should be {paired_value}")
 
     # Names of related institutions must equal each other
     mappings = rel_values_mapping()
@@ -88,7 +91,7 @@ def read_relationship_from_file(rel_file):
             for row in relationships:
                 check_record_id = parse_record_id(row['Record ID'])
                 check_related_id = parse_record_id(row['Related ID'])
-                if (check_record_id and check_related_id): 
+                if (check_record_id and check_related_id):
                     rel_dict['short_record_id'] = check_record_id
                     rel_dict['short_related_id'] = check_related_id
                     rel_dict['record_id'] = row['Record ID']
@@ -125,11 +128,11 @@ def check_relationships_from_file(current_record, file_path, rel_file):
                         info["errors"].append(
                         f"Related relationship not found for {related_relshp['id']}")
             if len(files_exist) == 0:
-                info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. At least one file listed in relationships must exist")  
+                info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. At least one file listed in relationships must exist")
         else:
-            info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. However, no relationships exist in the file")  
+            info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. However, no relationships exist in the file")
 
-  
+
     return info["errors"]
 
 def check_relationships():
@@ -144,7 +147,7 @@ def check_relationships():
                 info["errors"].append(
                     f"Related relationship not found for {related_relshp['id']}")
     if len(files_exist) == 0:
-        info["errors"].append(f"Relationships exist for {info['record_info']['id']}. At least one file listed in relationships must exist")    
+        info["errors"].append(f"Relationships exist for {info['record_info']['id']}. At least one file listed in relationships must exist")
     return info["errors"]
 
 def process_relationships(current_record, file_path, rel_file=None):
@@ -161,4 +164,3 @@ def process_relationships(current_record, file_path, rel_file=None):
         else:
             msg = "No relationships found, nothing to check"
     return msg
-    

@@ -441,7 +441,6 @@
     "status": {
       "type": "string",
       "enum": ["active", "inactive", "withdrawn"],
-      "readOnly": true,
       "default": "active"
     }
   },
@@ -451,5 +450,5 @@
       "minLength": 1
     }
   },
-  "required": ["name", "types", "addresses"]
+  "required": ["name", "types", "addresses", "status"]
 }
