@@ -120,8 +120,8 @@ def read_relationship_from_file(rel_file):
     rel_dict = {}
     try:
         with open(rel_file, 'r') as rel:
-            relationships = DictReader(rel)
-            for row in relationships:
+            rel_file_dict = DictReader(rel)
+            for row in rel_file_dict:
                 check_record_id = parse_record_id(row['Record ID'])
                 check_related_id = parse_record_id(row['Related ID'])
                 if (check_record_id and check_related_id):
