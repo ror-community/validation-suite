@@ -153,7 +153,7 @@ def check_relationships_from_file(current_record, file_path, rel_file):
                 file_rel = list(rel for rel in current_record['relationships'] if rel['id'] == r['related_id'])
                 file_rel = file_rel[0]
                 related_relshp = get_related_record(r['related_id'])
-                if not related_relshp and r['related_relationship'] not in INVERSE_TYPES:
+                if not related_relshp and r['record_relationship'] not in INVERSE_TYPES:
                     related_relshp = get_related_record_api(r['related_id'])
                 if related_relshp:
                     files_exist.append(r['related_id'])
