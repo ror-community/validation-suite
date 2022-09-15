@@ -1,10 +1,13 @@
 import json
 import os
 import re
+import requests
 from csv import DictReader
 from validate.utilities import *
 import validate.helpers as vh
 
+API_URL = "http://api.ror.org/organizations/"
+INVERSE_TYPES = ('Parent', 'Child', 'Related')
 info = {"file_path": None, "record_info": None, "errors": []}
 
 def rel_pair_validator(label):
@@ -57,8 +60,7 @@ def generate_related_relationships(id, name, rel):
         record['related_relationship'] = record['related_relationship'][0]
     return record
 
-
-def get_related_records(record_id):
+def get_related_record(record_id):
     related_record = {}
     filename = info["file_path"] + "/" + record_id.split(
         "ror.org/")[1] + ".json"
@@ -72,6 +74,37 @@ def get_related_records(record_id):
             raise RuntimeError (f"Couldn't open file {filename}: {e}")
     return related_record
 
+def get_related_record_api(record_id):
+    related_record = {}
+    download_url = API_URL + record_id
+    try:
+        rsp = requests.get(download_url)
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError (f"Couldn't download record {download_url}: {e}")
+    try:
+        response = rsp.json()
+        related_record = generate_related_relationships(
+                response['id'], response['name'], response['relationships'])
+    except Exception as e:
+        raise RuntimeError (f"Couldn't generate related record data for {download_url}: {e}")
+
+    return related_record
+
+def get_related_name_api(related_id):
+    name = None
+    download_url=API_URL + related_id
+    try:
+        rsp = requests.get(download_url)
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request for {download_url}: {e}")
+
+    try:
+        response = rsp.json()
+        name = response['name']
+    except Exception as e:
+        logging.error(f"Getting name for {related_id}: {e}")
+    return name
+
 def parse_record_id(id):
     parsed_id = None
     pattern = '^https:\/\/ror.org\/(0[a-z|0-9]{8})$'
@@ -83,7 +116,7 @@ def parse_record_id(id):
     return parsed_id
 
 def read_relationship_from_file(rel_file):
-    relation = []
+    relationships = []
     rel_dict = {}
     try:
         with open(rel_file, 'r') as rel:
@@ -100,26 +133,28 @@ def read_relationship_from_file(rel_file):
                     relation.append(rel_dict.copy())
     except IOError as e:
         raise RuntimeError(f"Reading file {rel_file}: {e}")
-    return relation
+    return relationships
 
 def get_single_related_relationship(related_id):
-    return get_related_records(related_id)
+    return get_related_record(related_id)
 
 def check_relationships_from_file(current_record, file_path, rel_file):
     files_exist = []
-    chk_relshp = read_relationship_from_file(rel_file)
-    get_file_ids = list(i['record_id'] for i in chk_relshp)
+    relationships = read_relationship_from_file(rel_file)
+    get_file_ids = list(i['record_id'] for i in relationships)
     if current_record['id'] in get_file_ids:
         rel = vh.get_relationship_info()
         if rel['rel']:
             info["file_path"] = file_path
             info["record_info"] = rel
             info["errors"] = []
-            all_current_id_relationships = list(i for i in chk_relshp if i['record_id'] == current_record['id'])
+            all_current_id_relationships = list(i for i in relationships if i['record_id'] == current_record['id'])
             for r in all_current_id_relationships:
                 file_rel = list(rel for rel in current_record['relationships'] if rel['id'] == r['related_id'])
                 file_rel = file_rel[0]
-                related_relshp = get_related_records(r['related_id'])
+                related_relshp = get_related_record(r['related_id'])
+                if not related_relshp and r['related_relationship'] not in INVERSE_TYPES:
+                    related_relshp = get_related_record_api(r['related_id'])
                 if related_relshp:
                     files_exist.append(r['related_id'])
                     if related_relshp['related_relationship']:
@@ -138,7 +173,7 @@ def check_relationships_from_file(current_record, file_path, rel_file):
 def check_relationships():
     files_exist = []
     for record in info['record_info']['rel']:
-        related_relshp = get_related_records(record['id'])
+        related_relshp = get_related_record(record['id'])
         if related_relshp:
             files_exist.append(record['id'])
             if related_relshp['related_relationship']:
