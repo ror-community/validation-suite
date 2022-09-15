@@ -130,7 +130,7 @@ def read_relationship_from_file(rel_file):
                     rel_dict['record_id'] = row['Record ID']
                     rel_dict['related_id'] = row['Related ID']
                     rel_dict['record_relationship'] = row['Relationship of Related ID to Record ID']
-                    relation.append(rel_dict.copy())
+                    relationships.append(rel_dict.copy())
     except IOError as e:
         raise RuntimeError(f"Reading file {rel_file}: {e}")
     return relationships
