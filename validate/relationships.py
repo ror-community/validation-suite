@@ -201,17 +201,17 @@ def check_relationships_removed():
 def process_relationships(current_record, file_path, rel_file=None):
     msg = None
     info["errors"] = []
-        if rel_file and current_record['status'] == 'active':
-            msg = check_relationships_from_file(current_record, file_path, rel_file)
-        else:
-            current_record_rel_info = vh.get_relationship_info()
-            if current_record_rel_info ['rel']:
-                info["file_path"] = file_path
-                info["record_info"] = current_record_rel_info
-                if current_record['status'] == 'active':
-                    msg = check_relationships()
-                else:
-                    msg = check_relationships_removed()
+    if rel_file and current_record['status'] == 'active':
+        msg = check_relationships_from_file(current_record, file_path, rel_file)
+    else:
+        current_record_rel_info = vh.get_relationship_info()
+        if current_record_rel_info ['rel']:
+            info["file_path"] = file_path
+            info["record_info"] = current_record_rel_info
+            if current_record['status'] == 'active':
+                msg = check_relationships()
             else:
-                msg = "No relationships found, nothing to check"
+                msg = check_relationships_removed()
+        else:
+            msg = "No relationships found, nothing to check"
     return msg
