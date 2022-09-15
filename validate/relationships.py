@@ -47,10 +47,11 @@ def validate_relationship(file_rel, related_rel):
         info["errors"].append(err)
 
 
-def generate_related_relationships(id, name, rel):
+def generate_related_relationships(id, name, status, rel):
     record = {}
     record['id'] = id
     record['name'] = name
+    record['status'] = status
     if len(rel) > 0:
         record['related_relationship'] = list(
             filter(lambda d: d['id'] == info["record_info"]["id"], rel))
@@ -69,7 +70,7 @@ def get_related_record(record_id):
             with open(filename, 'r') as f:
                 data = json.load(f)
             related_record = generate_related_relationships(
-                data['id'], data['name'], data['relationships'])
+                data['id'], data['name'], data['status'], data['relationships'])
         except Exception as e:
             raise RuntimeError (f"Couldn't open file {filename}: {e}")
     return related_record
@@ -84,7 +85,7 @@ def get_related_record_api(record_id):
     try:
         response = rsp.json()
         related_record = generate_related_relationships(
-                response['id'], response['name'], response['relationships'])
+                response['id'], response['name'], response['status'], response['relationships'])
     except Exception as e:
         raise RuntimeError (f"Couldn't generate related record data for {download_url}: {e}")
 
@@ -172,12 +173,12 @@ def check_relationships_from_file(current_record, file_path, rel_file):
 
 def check_relationships():
     files_exist = []
-    for record in info['record_info']['rel']:
-        related_relshp = get_related_record(record['id'])
+    for relationship in info['record_info']['rel']:
+        related_relshp = get_related_record(relationship['id'])
         if related_relshp:
-            files_exist.append(record['id'])
+            files_exist.append(relationship['id'])
             if related_relshp['related_relationship']:
-                validate_relationship(record, related_relshp)
+                validate_relationship(relationship, related_relshp)
             else:
                 info["errors"].append(
                     f"Related relationship not found for {related_relshp['id']}")
@@ -185,17 +186,32 @@ def check_relationships():
         info["errors"].append(f"Relationships exist for {info['record_info']['id']}. At least one file listed in relationships must exist")
     return info["errors"]
 
+def check_relationships_removed():
+    related_active_records = []
+    for relationship in info['record_info']['rel']:
+        related_relshp = get_related_record(relationship['id'])
+        if not related_relshp:
+            related_relshp = get_related_record_api(relationship['id'])
+        if related_relshp and related_relshp['status'] == 'active':
+            related_active_records.append(related_relshp)
+    if len(related_active_records) > 0:
+        info["errors"].append(f"Inactive record {info['record_info']['id']} has {str(len(related_active_records))} relationshps to active records. These relationships must be removed.")
+    return info["errors"]
+
 def process_relationships(current_record, file_path, rel_file=None):
     msg = None
     info["errors"] = []
-    if rel_file:
-        msg = check_relationships_from_file(current_record, file_path, rel_file)
-    else:
-        rel = vh.get_relationship_info()
-        if rel['rel']:
-            info["file_path"] = file_path
-            info["record_info"] = rel
-            msg = check_relationships()
+        if rel_file and current_record['status'] == 'active':
+            msg = check_relationships_from_file(current_record, file_path, rel_file)
         else:
-            msg = "No relationships found, nothing to check"
+            current_record_rel_info = vh.get_relationship_info()
+            if current_record_rel_info ['rel']:
+                info["file_path"] = file_path
+                info["record_info"] = current_record_rel_info
+                if current_record['status'] == 'active':
+                    msg = check_relationships()
+                else:
+                    msg = check_relationships_removed()
+            else:
+                msg = "No relationships found, nothing to check"
     return msg
