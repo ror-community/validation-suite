@@ -39,9 +39,9 @@ def validate_relationship(file_rel, related_rel):
     # Names of related institutions must equal each other
     mappings = rel_values_mapping()
     for k, v in mappings.items():
-        if not (file_rel[k] == related_rel[v]) or not (
+        if not (file_rel[k] == related_rel[v]) or (related_rel['related_relationship'] is not None and not (
                 related_rel['related_relationship'][k]
-                == info['record_info'][v]):
+                == info['record_info'][v])):
             err[related_rel['id']].append(f"Values are not equal: validating record: {info['record_info'][v]} and relationship: {file_rel} and related record: {related_rel}")
     if err[related_rel['id']]:
         info["errors"].append(err)
