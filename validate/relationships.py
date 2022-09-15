@@ -157,11 +157,11 @@ def check_relationships_from_file(current_record, file_path, rel_file):
                     related_relshp = get_related_record_api(r['related_id'])
                 if related_relshp:
                     files_exist.append(r['related_id'])
-                    if related_relshp['related_relationship']:
-                        validate_relationship(file_rel, related_relshp)
-                    else:
-                        info["errors"].append(
-                        f"Related relationship not found for {related_relshp['id']}")
+                    #if related_relshp['related_relationship']:
+                    validate_relationship(file_rel, related_relshp)
+                    #else:
+                    #    info["errors"].append(
+                    #    f"Related relationship not found for {related_relshp['id']}")
             if len(files_exist) == 0:
                 info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. At least one file listed in relationships must exist")
         else:
