@@ -192,7 +192,7 @@ def check_relationships_removed():
         related_relshp = get_related_record(relationship['id'])
         if not related_relshp:
             related_relshp = get_related_record_api(relationship['id'])
-        existing_rels = [r for r in related_relshp['related_relationship'] if r['id'] == info['record_info']['id']]
+        existing_rels = [r for r in related_relshp['relationships'] if r['id'] == info['record_info']['id']]
         if related_relshp and related_relshp['status'] == 'active' and len(existing_rels > 0):
             related_active_records.append(existing_rels)
     if len(related_active_records) > 0:
