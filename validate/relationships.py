@@ -61,6 +61,11 @@ def generate_related_relationships(id, name, status, rel):
         record['related_relationship'] = record['related_relationship'][0]
     return record
 
+def check_file_exists(record_id):
+    filename = info["file_path"] + "/" + record_id.split(
+        "ror.org/")[1] + ".json"
+    return os.path.exists(filename)
+
 def get_related_record(record_id):
     related_record = {}
     filename = info["file_path"] + "/" + record_id.split(
@@ -189,12 +194,16 @@ def check_relationships():
 def check_relationships_removed():
     related_active_records = []
     for relationship in info['record_info']['rel']:
-        related_relshp = get_related_record(relationship['id'])
-        if not related_relshp:
+        if check_file_exists(relationship['id']):
+            print("File exists for " + relationship['id'])
+            related_relshp = get_related_record(relationship['id'])
+        else:
+            print("File does not exist. Fetching relationships from API for " + relationship['id'])
             related_relshp = get_related_record_api(relationship['id'])
-        existing_rels = [r for r in related_relshp['related_relationship'] if r['id'] == info['record_info']['id']]
-        if related_relshp and related_relshp['status'] == 'active' and len(existing_rels > 0):
-            related_active_records.append(existing_rels)
+        print(info)
+        print(related_relshp)
+        if related_relshp['related_relationship'] and related_relshp['status'] == 'active':
+            related_active_records.append(related_relshp['related_relationship'])
     if len(related_active_records) > 0:
         info["errors"].append(f"Inactive record {info['record_info']['id']} has {str(len(related_active_records))} relationshps to active records. These relationships must be removed.")
     return info["errors"]
@@ -213,6 +222,4 @@ def process_relationships(current_record, file_path, rel_file=None):
                 msg = check_relationships()
             else:
                 msg = check_relationships_removed()
-        else:
-            msg = "No relationships found, nothing to check"
     return msg
