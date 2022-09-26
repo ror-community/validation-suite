@@ -61,11 +61,6 @@ def generate_related_relationships(id, name, status, rel):
         record['related_relationship'] = record['related_relationship'][0]
     return record
 
-def check_file_exists(record_id):
-    filename = info["file_path"] + "/" + record_id.split(
-        "ror.org/")[1] + ".json"
-    return os.path.exists(filename)
-
 def get_related_record(record_id):
     related_record = {}
     filename = info["file_path"] + "/" + record_id.split(
@@ -191,6 +186,11 @@ def check_relationships():
         info["errors"].append(f"Relationships exist for {info['record_info']['id']}. At least one file listed in relationships must exist")
     return info["errors"]
 
+def check_file_exists(record_id):
+    filename = info["file_path"] + "/" + record_id.split(
+        "ror.org/")[1] + ".json"
+    return os.path.exists(filename)
+
 def check_relationships_removed():
     related_active_records = []
     for relationship in info['record_info']['rel']:
@@ -200,8 +200,6 @@ def check_relationships_removed():
         else:
             print("File does not exist. Fetching relationships from API for " + relationship['id'])
             related_relshp = get_related_record_api(relationship['id'])
-        print(info)
-        print(related_relshp)
         if related_relshp['related_relationship'] and related_relshp['status'] == 'active':
             related_active_records.append(related_relshp['related_relationship'])
     if len(related_active_records) > 0:
