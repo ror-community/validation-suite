@@ -200,10 +200,11 @@ def check_relationships_removed():
         else:
             print("File does not exist. Fetching relationships from API for " + relationship['id'])
             related_relshp = get_related_record_api(relationship['id'])
-        if related_relshp['related_relationship'] and related_relshp['status'] == 'active' and related_relshp['type'] != 'Predecessor':
+        if related_relshp['related_relationship'] and related_relshp['status'] == 'active':
             related_active_records.append(related_relshp['related_relationship'])
-    if len(related_active_records) > 0:
-        info["errors"].append(f"Inactive record {info['record_info']['id']} has {str(len(related_active_records))} relationshps to active records. These relationships must be removed.")
+    related_active_records_not_predecessor = [r for r in related_active_records if r['type'] != 'Predecessor']
+    if len(related_active_records_not_predecessor) > 0:
+        info["errors"].append(f"Inactive record {info['record_info']['id']} has {str(len(related_active_records_not_predecessor))} relationshps to active records. These relationships must be removed.")
     return info["errors"]
 
 def process_relationships(current_record, file_path, rel_file=None):
