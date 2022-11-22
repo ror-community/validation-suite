@@ -152,17 +152,20 @@ def check_relationships_from_file(current_record, file_path, rel_file):
             all_current_id_relationships = list(i for i in relationships if i['record_id'] == current_record['id'])
             for r in all_current_id_relationships:
                 file_rel = list(rel for rel in current_record['relationships'] if rel['id'] == r['related_id'])
-                file_rel = file_rel[0]
-                related_relshp = get_related_record(r['related_id'])
-                if not related_relshp and r['record_relationship'] not in INVERSE_TYPES:
-                    related_relshp = get_related_record_api(r['related_id'])
-                if related_relshp:
-                    files_exist.append(r['related_id'])
-                    if related_relshp['related_relationship'] or r['record_relationship'] not in INVERSE_TYPES:
-                        validate_relationship(file_rel, related_relshp)
-                    else:
-                        info["errors"].append(
-                        f"Relationship is a type that must have inverse in related record but related relationship not found for {related_relshp['id']}")
+                if len(file_rel)==0:
+                    info["errors"].append(f"Relationship to {r['related_id']} is missing from file for {current_record['id']}")
+                else:
+                    file_rel = file_rel[0]
+                    related_relshp = get_related_record(r['related_id'])
+                    if not related_relshp and r['record_relationship'] not in INVERSE_TYPES:
+                        related_relshp = get_related_record_api(r['related_id'])
+                    if related_relshp:
+                        files_exist.append(r['related_id'])
+                        if related_relshp['related_relationship'] or r['record_relationship'] not in INVERSE_TYPES:
+                            validate_relationship(file_rel, related_relshp)
+                        else:
+                            info["errors"].append(
+                            f"Relationship is a type that must have inverse in related record but related relationship not found for {related_relshp['id']}")
             if len(files_exist) == 0:
                 info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. At least one file listed in relationships must exist")
         else:
