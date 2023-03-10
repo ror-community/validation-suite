@@ -8,7 +8,7 @@ import validate.helpers as vh
 
 API_URL = "http://api.ror.org/organizations/"
 INVERSE_TYPES = ('Parent', 'Child', 'Related')
-info = {"file_path": None, "record_info": None, "errors": []}
+INFO = {"file_path": '', "record_info": {}, "errors": []}
 
 def rel_pair_validator(label):
     """Setting up the relationship pairs for relationship types"""
@@ -41,10 +41,10 @@ def validate_relationship(file_rel, related_rel):
     for k, v in mappings.items():
         if not (file_rel[k] == related_rel[v]) or (related_rel['related_relationship'] is not None and not (
                 related_rel['related_relationship'][k]
-                == info['record_info'][v])):
-            err[related_rel['id']].append(f"Values are not equal: validating record: {info['record_info'][v]} and relationship: {file_rel} and related record: {related_rel}")
+                == INFO['record_info'][v])):
+            err[related_rel['id']].append(f"Values are not equal: validating record: {INFO['record_info'][v]} and relationship: {file_rel} and related record: {related_rel}")
     if err[related_rel['id']]:
-        info["errors"].append(err)
+        INFO["errors"].append(err)
 
 
 def generate_related_relationships(id, name, status, rel):
@@ -54,7 +54,7 @@ def generate_related_relationships(id, name, status, rel):
     record['status'] = status
     if len(rel) > 0:
         record['related_relationship'] = list(
-            filter(lambda d: d['id'] == info["record_info"]["id"], rel))
+            filter(lambda d: d['id'] == INFO["record_info"]["id"], rel))
     if (len(rel) == 0) or (len(record['related_relationship']) == 0):
         record['related_relationship'] = None
     else:
@@ -63,7 +63,7 @@ def generate_related_relationships(id, name, status, rel):
 
 def get_related_record(record_id):
     related_record = {}
-    filename = info["file_path"] + "/" + record_id.split(
+    filename = INFO["file_path"] + "/" + record_id.split(
         "ror.org/")[1] + ".json"
     if os.path.exists(filename):
         try:
@@ -80,6 +80,7 @@ def get_related_record_api(record_id):
     download_url = API_URL + record_id
     try:
         rsp = requests.get(download_url)
+        rsp.raise_for_status()
     except requests.exceptions.RequestException as e:
         raise RuntimeError (f"Couldn't download record {download_url}: {e}")
     try:
@@ -96,14 +97,14 @@ def get_related_name_api(related_id):
     download_url=API_URL + related_id
     try:
         rsp = requests.get(download_url)
+        rsp.raise_for_status()
     except requests.exceptions.RequestException as e:
-        logging.error(f"Request for {download_url}: {e}")
-
+        raise RuntimeError(f"Request for {download_url}: {e}")
     try:
         response = rsp.json()
         name = response['name']
     except Exception as e:
-        logging.error(f"Getting name for {related_id}: {e}")
+        raise RuntimeError(f"Getting name for {related_id}: {e}")
     return name
 
 def parse_record_id(id):
@@ -113,7 +114,7 @@ def parse_record_id(id):
     if ror_id:
         parsed_id = ror_id.group(1)
     else:
-        info["errors"].append(f"ROR ID: {id} does not match format: {pattern}. Record will not be validated")
+        INFO["errors"].append(f"ROR ID: {id} does not match format: {pattern}. Record will not be validated")
     return parsed_id
 
 def read_relationship_from_file(rel_file):
@@ -139,21 +140,17 @@ def read_relationship_from_file(rel_file):
 def get_single_related_relationship(related_id):
     return get_related_record(related_id)
 
-def check_relationships_from_file(current_record, file_path, rel_file):
+def check_relationships_from_file(rel_file):
     files_exist = []
     relationships = read_relationship_from_file(rel_file)
     get_file_ids = list(i['record_id'] for i in relationships)
-    if current_record['id'] in get_file_ids:
-        rel = vh.get_relationship_info()
-        if rel['rel']:
-            info["file_path"] = file_path
-            info["record_info"] = rel
-            info["errors"] = []
-            all_current_id_relationships = list(i for i in relationships if i['record_id'] == current_record['id'])
+    if INFO["record_info"]['id'] in get_file_ids:
+        if INFO["record_info"]['rel']:
+            all_current_id_relationships = list(i for i in relationships if i['record_id'] == INFO["record_info"]['id'])
             for r in all_current_id_relationships:
-                file_rel = list(rel for rel in current_record['relationships'] if rel['id'] == r['related_id'])
+                file_rel = list(rel for rel in INFO["record_info"]['rel'] if rel['id'] == r['related_id'])
                 if len(file_rel)==0:
-                    info["errors"].append(f"Relationship to {r['related_id']} is missing from file for {current_record['id']}")
+                    INFO["errors"].append(f"Relationship to {r['related_id']} is missing from file for {INFO['record_info']['id']}")
                 else:
                     file_rel = file_rel[0]
                     related_relshp = get_related_record(r['related_id'])
@@ -164,39 +161,37 @@ def check_relationships_from_file(current_record, file_path, rel_file):
                         if related_relshp['related_relationship'] or r['record_relationship'] not in INVERSE_TYPES:
                             validate_relationship(file_rel, related_relshp)
                         else:
-                            info["errors"].append(
+                            INFO["errors"].append(
                             f"Relationship is a type that must have inverse in related record but related relationship not found for {related_relshp['id']}")
             if len(files_exist) == 0:
-                info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. At least one file listed in relationships must exist")
+                INFO["errors"].append(f"According to {rel_file}, relationships exist for {INFO['record_info']['id']}. At least one file listed in relationships must exist")
         else:
-            info["errors"].append(f"According to {rel_file}, relationships exist for {current_record['id']}. However, no relationships exist in the file")
-
-
-    return info["errors"]
+            INFO["errors"].append(f"According to {rel_file}, relationships exist for {INFO['record_info']['id']}. However, no relationships exist in the file")
+    return INFO["errors"]
 
 def check_relationships():
     files_exist = []
-    for relationship in info['record_info']['rel']:
+    for relationship in INFO['record_info']['rel']:
         related_relshp = get_related_record(relationship['id'])
         if related_relshp:
             files_exist.append(relationship['id'])
             if related_relshp['related_relationship']:
                 validate_relationship(relationship, related_relshp)
             else:
-                info["errors"].append(
+                INFO["errors"].append(
                     f"Related relationship not found for {related_relshp['id']}")
     if len(files_exist) == 0:
-        info["errors"].append(f"Relationships exist for {info['record_info']['id']}. At least one file listed in relationships must exist")
-    return info["errors"]
+        INFO["errors"].append(f"Relationships exist for {INFO['record_info']['id']}. At least one file listed in relationships must exist")
+    return INFO["errors"]
 
 def check_file_exists(record_id):
-    filename = info["file_path"] + "/" + record_id.split(
+    filename = INFO["file_path"] + "/" + record_id.split(
         "ror.org/")[1] + ".json"
     return os.path.exists(filename)
 
 def check_relationships_removed():
     related_active_records = []
-    for relationship in info['record_info']['rel']:
+    for relationship in INFO['record_info']['rel']:
         if check_file_exists(relationship['id']):
             print("File exists for " + relationship['id'])
             related_relshp = get_related_record(relationship['id'])
@@ -207,21 +202,34 @@ def check_relationships_removed():
             related_active_records.append(related_relshp['related_relationship'])
     related_active_records_not_predecessor = [r for r in related_active_records if r['type'] != 'Predecessor']
     if len(related_active_records_not_predecessor) > 0:
-        info["errors"].append(f"Inactive record {info['record_info']['id']} has {str(len(related_active_records_not_predecessor))} relationshps to active records. These relationships must be removed.")
-    return info["errors"]
+        INFO["errors"].append(f"Inactive record {INFO['record_info']['id']} has {str(len(related_active_records_not_predecessor))} relationshps to active records. These relationships must be removed.")
+    return INFO["errors"]
+
+def check_duplicate_relationships():
+    duplicates = []
+    for rel in INFO["record_info"]['rel']:
+        current_id = rel['id']
+        current_type = rel['type']
+        current_id_duplicates = [r for r in INFO["record_info"]['rel'] if (r['id'] == current_id and (not r['type'] == current_type))]
+        duplicates.append(current_id_duplicates)
+    if len(duplicates) > 0:
+        INFO["errors"].append(f"Record {INFO['record_info']['id']} has {str(len(duplicates))} duplicate relationships. Please check and remove duplicates.")
+    return INFO["errors"]
+
 
 def process_relationships(current_record, file_path, rel_file=None):
     msg = None
-    info["errors"] = []
-    if rel_file and current_record['status'] == 'active':
-        msg = check_relationships_from_file(current_record, file_path, rel_file)
-    else:
-        current_record_rel_info = vh.get_relationship_info()
-        if current_record_rel_info ['rel']:
-            info["file_path"] = file_path
-            info["record_info"] = current_record_rel_info
-            if current_record['status'] == 'active':
-                msg = check_relationships()
-            else:
-                msg = check_relationships_removed()
+    INFO["errors"] = []
+    INFO["file_path"] = file_path
+    INFO["record_info"] = vh.get_relationship_info()
+    msg = check_duplicate_relationships()
+    if len(msg == 0):
+        if rel_file and current_record['status'] == 'active':
+            msg = check_relationships_from_file(rel_file)
+        else:
+            if INFO["record_info"]['rel']:
+                if current_record['status'] == 'active':
+                    msg = check_relationships()
+                else:
+                    msg = check_relationships_removed()
     return msg
