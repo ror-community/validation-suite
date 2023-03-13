@@ -74,12 +74,17 @@ class Validate_Tests:
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
         return vh.handle_check(name,msg)
 
-    def validate_all(self, file_path=None, rel_file=None):
+    def validate_all(self, check_address, file_path=None, rel_file=None):
+        print("Validating " + vh.File['id'])
         # calling all public methods in this class and removing the current method name.
         # This enables future public methods to be called automatically as well
         method_name = str(self.validate_all.__name__)
         validator_functions = self._validator_functions()
         validator_functions.remove(method_name)
+        if not check_address:
+            method_name = str(self.check_address.__name__)
+            validator_functions.remove(method_name)
+
         results = []
         for methods in validator_functions:
             validate = getattr(self, methods)

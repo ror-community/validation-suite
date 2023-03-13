@@ -26,7 +26,6 @@ def validate_url(url):
 def check_country(geonames_response):
     # checks country code and country name
     country_check = {}
-    print(File['id'])
     print(File['addresses'][0])
     print(geonames_response)
     geonames_country_code = geonames_response['countryCode']

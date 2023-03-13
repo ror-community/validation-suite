@@ -207,13 +207,22 @@ def check_relationships_removed():
 
 def check_duplicate_relationships():
     duplicates = []
-    for rel in INFO["record_info"]['rel']:
-        current_id = rel['id']
-        current_type = rel['type']
-        current_id_duplicates = [r for r in INFO["record_info"]['rel'] if (r['id'] == current_id and (not r['type'] == current_type))]
-        duplicates.append(current_id_duplicates)
+    duplicate_types = []
+    rel_types = [r['type'] for r in INFO["record_info"]['rel']]
+    rels_grouped_by_type = {}
+    for type in rel_types:
+        current_type_ids = []
+        for rel in INFO["record_info"]['rel']:
+            if rel['type'] == type:
+                current_type_ids.append(rel['id'])
+        rels_grouped_by_type[type] = current_type_ids
+    for type, ids in rels_grouped_by_type.items():
+        current_duplicates = [i for i in ids if ids.count(i) > 1]
+        if len(current_duplicates) > 0:
+            duplicate_types.append(type)
+        duplicates.extend(current_duplicates)
     if len(duplicates) > 0:
-        INFO["errors"].append(f"Record {INFO['record_info']['id']} has {str(len(duplicates))} duplicate relationships. Please check and remove duplicates.")
+        INFO["errors"].append(f"Record {INFO['record_info']['id']} has duplicate relationships in type(s): {duplicate_types}. Please check and remove duplicates.")
     return INFO["errors"]
 
 
@@ -222,8 +231,9 @@ def process_relationships(current_record, file_path, rel_file=None):
     INFO["errors"] = []
     INFO["file_path"] = file_path
     INFO["record_info"] = vh.get_relationship_info()
+
     msg = check_duplicate_relationships()
-    if len(msg == 0):
+    if len(msg) == 0:
         if rel_file and current_record['status'] == 'active':
             msg = check_relationships_from_file(rel_file)
         else:
