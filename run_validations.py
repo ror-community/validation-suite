@@ -20,18 +20,22 @@ def set_args():
     parser.add_argument('-s', '--schema', help='Path or URL to schema')
     parser.add_argument('-p', '--file-path', help='Path to the rest of the files for relationship validation')
     parser.add_argument('-f', '--rel-file', help='Path to the file containing relationship mappings')
+    parser.add_argument('-v', '--schema-version', help='ROR schema version to validate against (1 or 2)', required=True, choices=['1', '2'])
     parser.add_argument('--no-geonames', action='store_true')
     args = parser.parse_args()
     return args
 
-def run_validation_tests(file, check_address, path=None, rel_file=None):
+def run_validation_tests(file, version, check_address, path=None, rel_file=None):
     """Runs validation tests on a file"""
     try:
         with open(file, 'r') as f:
             data = json.load(f)
     except Exception as e:
         raise(e)
-    validate = vt.Validate_Tests(data)
+    if version == '1':
+        validate = vt.Validate_Tests(data)
+    if version == '2':
+        validate = vt.Validate_Tests_V2(data)
     validation_errors = validate.validate_all(check_address, file_path=path, rel_file=rel_file)
     return validation_errors
 
@@ -66,7 +70,7 @@ def get_files(input):
         raise RuntimeError(f"{input} must be a valid file or directory")
     return files
 
-def validate(input, check_address, rel_file = None, path = None, schema = None):
+def validate(input, version, check_address, rel_file = None, path = None, schema = None):
     """Runs the files against the schema validator and the class that checks the usecases"""
     files = get_files(input)
     filename = ""
@@ -82,12 +86,15 @@ def validate(input, check_address, rel_file = None, path = None, schema = None):
         messages = {}
         filename = os.path.basename(f).split(".")[0]
         valid = True
-        valid, msg = vs.validate_file(f,schema)
+        valid, msg = vs.validate_file(f,schema,version)
         if valid:
-            messages[filename] = run_validation_tests(f, check_address, path, rel_file)
+            print("schema valid")
+            messages[filename] = run_validation_tests(f, version, check_address, path, rel_file)
             if len(messages[filename]) == 0:
                 messages[filename] = None
         else:
+            print("NOT schema valid")
+            print(msg)
             messages[filename] = msg
 
         if messages[filename]:
@@ -108,11 +115,12 @@ def main():
     schema = args.schema if args.schema else None
     rel_file = os.path.normpath(args.rel_file) if args.rel_file else None
     path = os.path.normpath(args.file_path) if args.file_path else None
+    version  = args.schema_version
     check_address = True
     if args.no_geonames:
         check_address = False
 
-    validate(args.input, check_address, rel_file, path, schema)
+    validate(args.input, version, check_address, rel_file, path, schema)
 
 if __name__ == "__main__":
     main()
