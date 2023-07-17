@@ -16,7 +16,7 @@ def fixture_file_schema():
     return "tests/fixtures/invalid/schema-issues/skeleton.json"
 
 def invocation(arg = "-i"):
-    return ["python", "run_validations.py", arg]
+    return ["python", "run_validations.py", "--no-geonames", arg]
 
 def capture(command):
     process = subprocess.run(command, capture_output=True, encoding="utf-8")
