@@ -21,7 +21,7 @@ def set_args():
     parser.add_argument('-p', '--file-path', help='Path to the rest of the files for relationship validation')
     parser.add_argument('-f', '--rel-file', help='Path to the file containing relationship mappings')
     parser.add_argument('-v', '--schema-version', help='ROR schema version to validate against (1 or 2)', required=True, choices=['1', '2'])
-    parser.add_argument('--no-geonames', action='store_true')
+    parser.add_argument('-n', '--no-geonames', help='Skip Geonames API validation for address fields', action='store_true')
     args = parser.parse_args()
     return args
 

@@ -4,9 +4,7 @@
   "email_address": null,
   "ip_addresses": [],
   "established": 1946,
-  "types": [
-    "Hospital"
-  ],
+  "types": [],
   "relationships": [
     {
       "label": "Calvary Hospital",
