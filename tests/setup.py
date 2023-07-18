@@ -5,9 +5,9 @@ import subprocess
 
 def valid_input(version):
     if version == '1':
-        return ["tests/fixtures/v1/valid/015m7wh34.json","tests/fixtures/valid/v1"]
+        return ["tests/fixtures/v1/valid/015m7wh34.json","tests/fixtures/v1/valid"]
     if version == '2':
-        return ["tests/fixtures/v2/valid/015m7wh34.json","tests/fixtures/valid/v2"]
+        return ["tests/fixtures/v2/valid/015m7wh34.json","tests/v2/fixtures/valid"]
 
 def valid_file_path(version):
     if version == '1':
@@ -28,7 +28,7 @@ def fixture_file_schema():
         return "tests/fixtures/v2/invalid/schema-issues/skeleton.json"
 
 def invocation():
-    return ["python", "run_validations.py"]
+    return ["python", "run_validations.py", "--no-geonames"]
 
 def capture(command):
     process = subprocess.run(command, capture_output=True, encoding="utf-8")
