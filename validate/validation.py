@@ -61,7 +61,7 @@ class Validate_Tests:
         msg = {}
         if len(labels) > 0:
             for label in labels:
-                result = vh.check_lang_code(label['iso_639'])
+                result = vh.check_lang_code(label['iso639'])
                 if result:
                     msg[label] = result
         if len(msg) == 0:
