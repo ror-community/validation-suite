@@ -44,3 +44,34 @@ def test_invalid_args_v1():
     assert exitcode == 2
     assert out == ''
     assert 'error: the following arguments are required: -i/--input' in err
+
+def test_valid_input_only_v2():
+    """This test is only for valid inputs"""
+    run_valid_args(V2_VERSION)
+
+def test_valid_input_rels_v2():
+    """This test is for valid inputs and checking relationships"""
+    path = valid_file_path(V2_VERSION)
+    o_args = format_optional_args(p = path)
+    run_valid_args(V2_VERSION, o_args)
+
+def test_valid_input_schema_v2():
+    """This test is for valid inputs and sending a schema file instead of using the default"""
+    schema = schema_fixture(V2_VERSION)
+    o_args = format_optional_args(s = schema)
+    run_valid_args(V2_VERSION, o_args)
+
+def test_valid_all_args_v2():
+    """This test is for valid inputs where a schema file is sent instead of the default and check for relationships"""
+    schema = schema_fixture(V2_VERSION)
+    path = valid_file_path(V2_VERSION)
+    o_args = format_optional_args(s = schema, p = path)
+    run_valid_args(V2_VERSION, o_args)
+
+def test_invalid_args_v2():
+    """This test sends an invalid argument"""
+    bad_command = [*invocation(), "-r", "test", "-v", V2_VERSION]
+    out, err, exitcode = capture(bad_command)
+    assert exitcode == 2
+    assert out == ''
+    assert 'error: the following arguments are required: -i/--input' in err

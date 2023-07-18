@@ -7,7 +7,7 @@ def valid_input(version):
     if version == '1':
         return ["tests/fixtures/v1/valid/015m7wh34.json","tests/fixtures/v1/valid"]
     if version == '2':
-        return ["tests/fixtures/v2/valid/015m7wh34.json","tests/v2/fixtures/valid"]
+        return ["tests/fixtures/v2/valid/example_record_v2_0.json","tests/fixtures/v2/valid"]
 
 def valid_file_path(version):
     if version == '1':
@@ -19,7 +19,7 @@ def schema_fixture(version):
     if version == '1':
         return "tests/fixtures/v1/schema/ror_schema.json"
     if version == '2':
-        return "tests/fixtures/v2/schema/ror_schema.json"
+        return "tests/fixtures/v2/schema/ror_schema_v2_0.json"
 
 def fixture_file_schema():
     if version == '1':
