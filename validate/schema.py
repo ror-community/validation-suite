@@ -35,7 +35,7 @@ def check_missing_fields(record, schema):
         record_address_fields = list(get_fields(record['addresses'][0]))
         missing_fields.extend(compare_fields(schema_address_fields, record_address_fields))
 
-    if "geonames_city" not in missing_fields:
+    if "addresses" not in missing_fields and "geonames_city" not in missing_fields:
         schema_geonames_fields = list(get_fields(schema['properties']['addresses']['items']['properties']['geonames_city']['properties']))
         record_geonames_fields = list(get_fields(record['addresses'][0]['geonames_city']))
         missing_fields.extend(compare_fields(schema_geonames_fields, record_geonames_fields))

@@ -76,10 +76,10 @@ def test_missing_fields():
         d = missing_field(rf, new_data)
         fname = f"{path['missing_fields']}/{rf}.json"
         out, err, exitcode = run_command(fname, d)
-        result = re.search(rf"\'{rf}.*?property", out, re.MULTILINE)
-        assert result.group() == f"'{rf}' is a required property"
+        result = re.search(r'File is missing field\(s\)\: {0}'.format(rf), out, re.MULTILINE)
+        assert bool(result) is True
         assert exitcode == 1
-    
+
 def test_enum_values():
     sub_folders = invalid_sub_folders()
     dir = invalid_fixture_path() + sub_folders["incorrect_enum_values"]
