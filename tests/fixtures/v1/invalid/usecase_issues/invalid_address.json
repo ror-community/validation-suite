@@ -74,11 +74,11 @@
   "labels": [
     {
       "label": "Centre d'Investigation Clinique de Rennes",
-      "iso639": "ft"
+      "iso639": "fr"
     }
   ],
   "country": {
-    "country_name": "Fradnce",
+    "country_name": "Fradce",
     "country_code": "FR"
   },
   "external_ids": {

@@ -63,7 +63,7 @@ class Validate_Tests:
             for label in labels:
                 result = vh.check_lang_code(label['iso639'])
                 if result:
-                    msg[label] = result
+                    msg = result
         if len(msg) == 0:
             msg = None
         return vh.handle_check(name,msg)
@@ -116,7 +116,6 @@ class Validate_Tests_V2:
         name = str(self.check_links.__name__)
         msg = {}
         links = [link['value'] for link in vh.File['links']]
-        print(links)
         # removing empty strings
         links = list(filter(None, links))
         if len(links) > 0:

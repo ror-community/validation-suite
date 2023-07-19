@@ -15,20 +15,26 @@ def valid_file_path(version):
     if version == '2':
         return "tests/fixtures/v2/valid"
 
+def invalid_file_path(version):
+    if version == '1':
+        return "tests/fixtures/v1/invalid/"
+    if version == '2':
+        return "tests/fixtures/v2/invalid/"
+
+def invalid_sub_folders():
+    dirs = {"missing_fields": "missing_fields/",
+            "enum_values": "enum_values/",
+            "usecase_issues": "usecase_issues/"}
+    return dirs
+
 def schema_fixture(version):
     if version == '1':
         return "tests/fixtures/v1/schema/ror_schema.json"
     if version == '2':
         return "tests/fixtures/v2/schema/ror_schema_v2_0.json"
 
-def fixture_file_schema():
-    if version == '1':
-        return "tests/fixtures/v1/invalid/schema-issues/skeleton.json"
-    if version == '2':
-        return "tests/fixtures/v2/invalid/schema-issues/skeleton.json"
-
 def invocation():
-    return ["python", "run_validations.py", "--no-geonames"]
+    return ["python", "run_validations.py"]
 
 def capture(command):
     process = subprocess.run(command, capture_output=True, encoding="utf-8")
@@ -52,12 +58,10 @@ def format_optional_args(**optional_args):
         fixed_args = dict(zip(altered_keys, list(optional_args.values())))
         return flatten(list(fixed_args.items()))
 
-def run_args(required_args, optional_args = []):
-    print("REQUIRED ARGS")
-    print(required_args)
-    print("OPTIONAL ARGS")
-    print(optional_args)
+def run_args(required_args, optional_args = [], nogeonames=True):
     command = [*invocation(), *required_args, *optional_args]
+    if nogeonames:
+        command.append("--no-geonames")
     out, err, exitcode = capture(command)
     print(out)
     print(err)

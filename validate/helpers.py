@@ -12,7 +12,6 @@ File = None
 def handle_check(name,msg=None):
     # all the validator messages use this pattern
     message = {}
-    print(msg)
     if msg:
         message[name] = {'status':msg}
     return message
@@ -29,7 +28,7 @@ def check_lang_code(lang):
     msg = None
     pylanguage = pycountry.languages.get(alpha_2=lang)
     if not(pylanguage):
-        msg = f'Language value: {lang} is not an iso639 standard'
+        msg = f'Language value {lang} is not an iso639 standard'
     return msg
 
 def check_duplicates(list_to_check):
@@ -44,8 +43,6 @@ def check_duplicates(list_to_check):
 def check_country(geonames_response):
     # checks country code and country name
     country_check = {}
-    print(File['addresses'][0])
-    print(geonames_response)
     geonames_country_code = geonames_response['countryCode']
     record_country_code = File['country']['country_code']
     geonames_country_name = geonames_response['countryName']
