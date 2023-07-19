@@ -211,7 +211,7 @@ class Validate_Tests_V2:
         validator_functions = self._validator_functions()
         validator_functions.remove(method_name)
         if not check_address:
-            method_name = str(self.check_address.__name__)
+            method_name = str(self.check_locations.__name__)
             validator_functions.remove(method_name)
 
         results = []

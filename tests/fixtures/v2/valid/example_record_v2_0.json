@@ -16,11 +16,13 @@
         {
             "type": "fundref",
             "all": [
+                "100005595",
                 "100009350",
                 "100004802",
                 "100010574",
                 "100005188",
                 "100005192"
+
             ],
             "preferred": "100005595"
         },
@@ -30,13 +32,6 @@
                 "grid.30389.31"
             ],
             "preferred": "grid.30389.31"
-        },
-        {
-            "type": "grid",
-            "all": [
-                "grid.30389.30"
-            ],
-            "preferred": "grid.30389.30"
         },
         {
             "type": "isni",
@@ -78,7 +73,8 @@
         {
             "value": "University of California System",
             "types": [
-                "label"
+                "label",
+                "ror_display"
             ],
             "lang": "en"
         },
