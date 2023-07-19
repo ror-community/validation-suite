@@ -11,9 +11,9 @@ def valid_input(version):
 
 def valid_file_path(version):
     if version == '1':
-        return "tests/fixtures/v1/valid"
+        return "tests/fixtures/v1/valid/"
     if version == '2':
-        return "tests/fixtures/v2/valid"
+        return "tests/fixtures/v2/valid/"
 
 def invalid_file_path(version):
     if version == '1':

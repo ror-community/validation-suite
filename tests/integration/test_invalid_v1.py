@@ -4,7 +4,6 @@ from ..setup import *
 import re
 
 V1_VERSION = '1'
-V2_VERSION = '2'
 
 def test_missing_fields_v1():
     sub_folders = invalid_sub_folders()
@@ -108,3 +107,30 @@ def test_invalid_relationship_v1():
     result = re.search(rf"{expected_msg}", out, re.MULTILINE)
     assert bool(result) is True
     assert exitcode == 1
+
+
+def test_valid_no_rels_v1():
+    dir = valid_file_path(V1_VERSION)
+    files = os.listdir(dir)
+    schema = schema_fixture(V1_VERSION)
+    o_args = format_optional_args(s = schema)
+    for f in files:
+        full_path = os.path.join(dir, f)
+        required_args = format_required_args(full_path, V1_VERSION)
+        out, err, exitcode = run_args(required_args, o_args)
+        result = re.search(r"schema valid", out, re.MULTILINE)
+        assert bool(result) is True
+        assert exitcode == 0
+
+def test_valid_rels_v1():
+    dir = valid_file_path(V1_VERSION)
+    files = os.listdir(dir)
+    schema = schema_fixture(V1_VERSION)
+    o_args = format_optional_args(s = schema, p = dir)
+    for f in files:
+        full_path = os.path.join(dir, f)
+        required_args = format_required_args(full_path, V1_VERSION)
+        out, err, exitcode = run_args(required_args, o_args)
+        result = re.search(r"schema valid", out, re.MULTILINE)
+        assert bool(result) is True
+        assert exitcode == 0
