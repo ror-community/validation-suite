@@ -84,6 +84,14 @@
                 "label"
             ],
             "lang": "fr"
+        },
+        {
+            "value": "University of California System",
+            "types": [
+                "label",
+                "ror_display"
+            ],
+            "lang": "en"
         }
     ],
     "relationships": [

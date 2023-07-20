@@ -161,15 +161,5 @@
     "status": "active",
     "types": [
         "education"
-    ],
-    "admin": {
-        "created": {
-            "date": "2020-04-25",
-            "schema_version": "1.0"
-        },
-        "last_modified": {
-            "date": "2022-10-18",
-            "schema_version": "2.0"
-        }
-    }
+    ]
 }

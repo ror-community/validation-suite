@@ -24,7 +24,9 @@ def invalid_file_path(version):
 def invalid_sub_folders():
     dirs = {"missing_fields": "missing_fields/",
             "enum_values": "enum_values/",
-            "usecase_issues": "usecase_issues/"}
+            "usecase_issues": "usecase_issues/",
+            "missing_properties": "missing_properties/",
+            "value_formats": "value_formats/"}
     return dirs
 
 def schema_fixture(version):

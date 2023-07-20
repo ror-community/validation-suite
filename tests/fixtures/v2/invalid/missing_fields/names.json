@@ -55,37 +55,6 @@
             "value": "http://en.wikipedia.org/wiki/University_of_California"
         }
     ],
-    "names": [
-        {
-            "value": "UC",
-            "types": [
-                "acronym"
-            ],
-            "lang": "en"
-        },
-        {
-            "value": "UC System",
-            "types": [
-                "alias"
-            ],
-            "lang": "en"
-        },
-        {
-            "value": "University of California System",
-            "types": [
-                "label",
-                "ror_display"
-            ],
-            "lang": "en"
-        },
-        {
-            "value": "Université de Californie",
-            "types": [
-                "label"
-            ],
-            "lang": "fr"
-        }
-    ],
     "relationships": [
         {
             "id": "https://ror.org/02jbv0t02",

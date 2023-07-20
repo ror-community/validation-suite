@@ -53,6 +53,10 @@
         {
             "type": "wikipedia",
             "value": "http://en.wikipedia.org/wiki/University_of_California"
+        },
+        {
+            "type": "website",
+            "value": "http://www.universityofcalifornia.edu/"
         }
     ],
     "names": [

@@ -6,7 +6,6 @@
                 "country_code": "US",
                 "country_name": "United States",
                 "lat": 37.802168,
-                "lng": -122.271281,
                 "name": "Oakland"
             }
         }
@@ -171,5 +170,6 @@
             "date": "2022-10-18",
             "schema_version": "2.0"
         }
+
     }
 }

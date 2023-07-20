@@ -45,16 +45,7 @@
     "domains": [
         "universityofcalifornia.edu"
     ],
-    "links": [
-        {
-            "type": "website",
-            "value": "http://www.universityofcalifornia.edu/"
-        },
-        {
-            "type": "wikipedia",
-            "value": "http://en.wikipedia.org/wiki/University_of_California"
-        }
-    ],
+    "links": "http://www.universityofcalifornia.edu/",
     "names": [
         {
             "value": "UC",

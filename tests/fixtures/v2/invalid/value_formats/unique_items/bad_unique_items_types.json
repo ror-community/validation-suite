@@ -160,6 +160,8 @@
     ],
     "status": "active",
     "types": [
+        "education",
+        "nonprofit",
         "education"
     ],
     "admin": {

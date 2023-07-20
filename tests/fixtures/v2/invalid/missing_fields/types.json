@@ -159,9 +159,6 @@
         }
     ],
     "status": "active",
-    "types": [
-        "education"
-    ],
     "admin": {
         "created": {
             "date": "2020-04-25",

@@ -12,35 +12,6 @@
         }
     ],
     "established": 1868,
-    "external_ids": [
-        {
-            "type": "fundref",
-            "all": [
-                "100005595",
-                "100009350",
-                "100004802",
-                "100010574",
-                "100005188",
-                "100005192"
-
-            ],
-            "preferred": "100005595"
-        },
-        {
-            "type": "grid",
-            "all": [
-                "grid.30389.31"
-            ],
-            "preferred": "grid.30389.31"
-        },
-        {
-            "type": "isni",
-            "all": [
-                "0000 0001 2348 0690"
-            ],
-            "preferred": null
-        }
-    ],
     "id": "https://ror.org/00pjdza24",
     "domains": [
         "universityofcalifornia.edu"

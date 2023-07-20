@@ -94,7 +94,6 @@ def validate(input, version, check_address, rel_file = None, path = None, schema
                 messages[filename] = None
         else:
             print("NOT schema valid")
-            print(msg)
             messages[filename] = msg
 
         if messages[filename]:

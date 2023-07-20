@@ -39,6 +39,13 @@
                 "0000 0001 2348 0690"
             ],
             "preferred": null
+        },
+        {
+            "type": "grid",
+            "all": [
+                "grid.30389.31"
+            ],
+            "preferred": "grid.30389.31"
         }
     ],
     "id": "https://ror.org/00pjdza24",
