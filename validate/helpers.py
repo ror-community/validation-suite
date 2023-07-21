@@ -40,6 +40,16 @@ def check_duplicates(list_to_check):
     duplicates = [item for item in unique_items if list_to_check.count(item) > 1]
     return duplicates
 
+def check_substrings(list_to_check):
+    substring_matches = []
+    for item in list_to_check:
+        for i in list_to_check:
+            if item in i:
+                if i.index(item) > 0:
+                    substring_matches.append(i)
+    return substring_matches
+
+
 def check_country(geonames_response):
     # checks country code and country name
     country_check = {}

@@ -191,8 +191,22 @@ class Validate_Tests_V2:
                     preferred_not_in_all.append({external_id['type']: external_id['preferred']})
         if len(preferred_not_in_all) > 0:
             msg['EXT_IDS_PREFERRED_ERROR'] = "1 or more external ID items have a value in preferred that is not included in all: " + str(preferred_not_in_all)
-
         return vh.handle_check(name,msg)
+
+
+    def check_domains(self):
+        name = str(self.check_domains.__name__)
+        msg = {}
+        domains = vh.File['domains']
+        domains = list(filter(None, domains))
+        # check whether subdomains of other domains listed in the same ROR record exist
+        substring_matches = vh.check_substrings(domains)
+        if len(substring_matches) > 0:
+            msg['DOMAINS_ERROR'] = "Domains contains subdomains of other domains: " + ", ".join(substring_matches)
+        # TO DO: add check for domain in other records
+        # need api changes first
+        return vh.handle_check(name,msg)
+
 
     def check_established_year(self):
         # checks established year
