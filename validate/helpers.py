@@ -8,6 +8,7 @@ from validate.utilities import *
 from copy import deepcopy
 
 File = None
+ROR_DISPLAY = "ror_display"
 
 def handle_check(name,msg=None):
     # all the validator messages use this pattern
@@ -124,9 +125,25 @@ def get_record_address():
     id = address['geonames_city']['id']
     return id,address
 
+def get_ror_display_name(names):
+    ror_display = None
+    for name in names:
+        if ROR_DISPLAY in name['types']:
+            ror_display = name['value']
+            break
+    return ror_display
+
+
 def get_relationship_info():
     # returns relationship dictionary
     return {"id": File['id'], "name": File['name'],"rel": File["relationships"]}
+
+
+def get_relationship_info_v2():
+    # returns relationship dictionary
+    name = get_ror_display_name(File['names'])
+    return {"id": File['id'], "name": name,"rel": File["relationships"]}
+
 
 def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
     compare = msg

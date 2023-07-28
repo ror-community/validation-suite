@@ -6,6 +6,7 @@ import validators
 import validate.utilities as u
 import validate.helpers as vh
 import validate.relationships as vr
+import validate.relationships_v2 as vr2
 import datetime as dt
 
 class Validate_Tests:
@@ -144,7 +145,7 @@ class Validate_Tests_V2:
             msg['NAMES_DUPLICATES_ERROR'] = "Multiple names have the same value(s): " + ", ".join(duplicates)
         lang_errors = []
         for record_name in vh.File['names']:
-            if record_name['lang'] != "":
+            if record_name['lang'] and record_name['lang'] != "":
                 result = vh.check_lang_code(record_name['lang'])
                 if result:
                     lang_errors.append(result)
@@ -234,7 +235,7 @@ class Validate_Tests_V2:
             results.append(validate())
         if file_path:
              # if relationship is being checked
-            msg = vr.process_relationships(current_record = vh.File, file_path=file_path, rel_file=rel_file)
+            msg = vr2.process_relationships(current_record = vh.File, file_path=file_path, rel_file=rel_file)
             if msg:
                 results.append({'relationships':msg})
         results = list(filter(None,results))
