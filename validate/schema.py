@@ -60,23 +60,21 @@ def check_missing_fields_v2(record, schema):
 
     return missing_fields
 
-def validate_file(file,schema,version):
+def validate_record(record,schema,version):
     """ checks if schema is sent and if so, retrieving the schema depending on its type and validating the file against it"""
 
     if schema:
         stype = schema_type(schema)
-    arg_exists(file)
     valid = False
     schema = get_schema_from_url(version) if schema is None else get_json(schema,stype)
     msg = None
-    json = get_json(file)
     if version == '1':
-        missing_fields = check_missing_fields_v1(json, schema)
+        missing_fields = check_missing_fields_v1(record, schema)
     if version == '2':
-        missing_fields = check_missing_fields_v2(json, schema)
+        missing_fields = check_missing_fields_v2(record, schema)
     if len(missing_fields) == 0:
         try:
-            validate(instance = json, schema = schema, format_checker=jsonschema.FormatChecker())
+            validate(instance = record, schema = schema, format_checker=jsonschema.FormatChecker())
         except jsonschema.exceptions.ValidationError as err:
             msg = err
     else:

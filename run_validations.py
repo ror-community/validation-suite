@@ -8,6 +8,7 @@ import sys
 import json
 import pathlib
 import logging
+from zipfile import ZipFile, ZIP_DEFLATED
 
 ERROR_LOG = "validation_errors.log"
 logging.basicConfig(filename=ERROR_LOG,level=logging.ERROR, filemode='w')
@@ -25,17 +26,12 @@ def set_args():
     args = parser.parse_args()
     return args
 
-def run_validation_tests(file, version, check_address, path=None, rel_file=None):
-    """Runs validation tests on a file"""
-    try:
-        with open(file, 'r') as f:
-            data = json.load(f)
-    except Exception as e:
-        raise(e)
+def run_validation_tests(record, version, check_address, path=None, rel_file=None):
+    """Runs validation tests on a json record"""
     if version == '1':
-        validate = vt.Validate_Tests(data)
+        validate = vt.Validate_Tests(record)
     if version == '2':
-        validate = vt.Validate_Tests_V2(data)
+        validate = vt.Validate_Tests_V2(record)
     validation_errors = validate.validate_all(check_address, file_path=path, rel_file=rel_file)
     return validation_errors
 
@@ -70,7 +66,59 @@ def get_files(input):
         raise RuntimeError(f"{input} must be a valid file or directory")
     return files
 
-def validate(input, version, check_address, rel_file = None, path = None, schema = None):
+def validate_dump(input, version, check_address, rel_file = None, path = None, schema = None):
+    """Runs the files against the schema validator and the class that checks the usecases"""
+    validation_errors = False
+    errors = []
+    '''
+    if (rel_file and not(path)):
+        raise AttributeError(f"Relationship file: {rel_file} must be passed with a --file-path argument which is a path to the rest of the files for relationship validation")
+    elif (rel_file and path):
+        u.arg_exists(rel_file)
+    '''
+    dump_unzipped = None
+    records = []
+    with ZipFile(input, "r") as zf:
+        json_files_count = sum('.json' in s for s in zf.namelist())
+        print(zf.namelist())
+        if json_files_count == 1:
+            for name in zf.namelist():
+                # assumes ror-data zip will only contain 1 JSON file
+                if '.json' in name:
+                    dump_unzipped = zf.extract(name, '.')
+        else:
+            print("Dump zip contains multiple json files. Something is wrong.")
+
+    records = u.get_json(dump_unzipped)
+
+    for r in records:
+        messages = {}
+        record_name  = r['id'].split("https://ror.org/")[1]
+        valid = True
+        valid, msg = vs.validate_record(r,schema,version)
+        if valid:
+            print("schema valid")
+            messages[record_name] = run_validation_tests(r, version, check_address, path, rel_file)
+            if len(messages[record_name]) == 0:
+                messages[record_name] = None
+        else:
+            print("NOT schema valid")
+            messages[record_name] = msg
+
+        if messages[record_name]:
+            errors.append(deepcopy(messages))
+
+    if len(errors) > 0:
+        validation_errors = print_errors(errors, validation_errors)
+
+    if validation_errors:
+        with open(ERROR_LOG, 'r') as f:
+            print(f.read())
+        sys.exit(1)
+    else:
+        sys.exit(0)
+
+def validate_files(input, version, check_address, rel_file = None, path = None, schema = None):
     """Runs the files against the schema validator and the class that checks the usecases"""
     files = get_files(input)
     filename = ""
@@ -85,11 +133,13 @@ def validate(input, version, check_address, rel_file = None, path = None, schema
     for f in files:
         messages = {}
         filename = os.path.basename(f).split(".")[0]
+        u.arg_exists(f)
+        record = u.get_json(f)
         valid = True
-        valid, msg = vs.validate_file(f,schema,version)
+        valid, msg = vs.validate_record(record, schema,version)
         if valid:
             print("schema valid")
-            messages[filename] = run_validation_tests(f, version, check_address, path, rel_file)
+            messages[filename] = run_validation_tests(record, version, check_address, path, rel_file)
             if len(messages[filename]) == 0:
                 messages[filename] = None
         else:
@@ -118,8 +168,15 @@ def main():
     check_address = True
     if args.no_geonames:
         check_address = False
+    if os.path.splitext(args.input)[1] == '.zip':
+        # do not attempt to validate relationships or addresses in dump
+        check_address = False
+        rel_file = None
+        path = None
+        validate_dump(args.input, version, check_address, rel_file, path, schema)
+    else:
+        validate_files(args.input, version, check_address, rel_file, path, schema)
 
-    validate(args.input, version, check_address, rel_file, path, schema)
 
 if __name__ == "__main__":
     main()
