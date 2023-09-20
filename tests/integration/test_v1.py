@@ -134,3 +134,17 @@ def test_valid_rels_v1():
         result = re.search(r"schema valid", out, re.MULTILINE)
         assert bool(result) is True
         assert exitcode == 0
+
+def test_missing_ext_ids_all_v1():
+    filename = "missing_ext_ids_all.json"
+    sub_folders = invalid_sub_folders()
+    dir = invalid_file_path(V1_VERSION) + sub_folders["usecase_issues"]
+    schema = schema_fixture(V1_VERSION)
+    o_args = format_optional_args(s = schema)
+    full_path = os.path.join(dir, filename)
+    required_args = format_required_args(full_path, V1_VERSION)
+    out, err, exitcode = run_args(required_args, o_args)
+    expected_msg = "'all' is a required property"
+    result = re.search(rf"{expected_msg}", out, re.MULTILINE)
+    assert bool(result) is True
+    assert exitcode == 1

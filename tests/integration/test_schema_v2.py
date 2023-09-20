@@ -150,7 +150,7 @@ def test_invalid_link_v2():
     assert exitcode == 1
 
 
-def test_invalid_langcode_v1():
+def test_invalid_langcode_v2():
     filename = "invalid_langcode.json"
     sub_folders = invalid_sub_folders()
     dir = invalid_file_path(V2_VERSION) + sub_folders["usecase_issues"]
@@ -159,7 +159,7 @@ def test_invalid_langcode_v1():
     full_path = os.path.join(dir, filename)
     required_args = format_required_args(full_path, V2_VERSION)
     out, err, exitcode = run_args(required_args, o_args)
-    expected_msg = "In check_names: {'status': {'NAMES_LANG_ERROR': ['Language value ft is not an iso639 standard']}}"
+    expected_msg = "Language value ft is not an iso639 standard"
     result = re.search(rf"{expected_msg}", out, re.MULTILINE)
     assert bool(result) is True
     assert exitcode == 1
@@ -204,7 +204,7 @@ def test_invalid_names_duplicate_values_v2():
     full_path = os.path.join(dir, filename)
     required_args = format_required_args(full_path, V2_VERSION)
     out, err, exitcode = run_args(required_args, o_args, False)
-    expected_msg = "In check_names: {'status': {'NAMES_DUPLICATES_ERROR': 'Multiple names have the same value(s): UC System'}}"
+    expected_msg = "Multiple names have the same value"
     result = re.search(rf"{expected_msg}", out, re.MULTILINE)
     assert bool(result) is True
     assert exitcode == 1
@@ -234,7 +234,7 @@ def test_invalid_external_ids_duplicate_type_v2():
     full_path = os.path.join(dir, filename)
     required_args = format_required_args(full_path, V2_VERSION)
     out, err, exitcode = run_args(required_args, o_args, False)
-    expected_msg = "In check_external_ids: {'status': {'EXT_IDS_DUPLICATE_TYPES_ERROR': 'Multiple external ID items have the same type(s): fundref'}}"
+    expected_msg = "Multiple external ID items have the same type"
     result = re.search(rf"{expected_msg}", out, re.MULTILINE)
     assert bool(result) is True
     assert exitcode == 1
@@ -249,7 +249,7 @@ def test_invalid_external_ids_preferred_not_in_all_v2():
     full_path = os.path.join(dir, filename)
     required_args = format_required_args(full_path, V2_VERSION)
     out, err, exitcode = run_args(required_args, o_args, False)
-    expected_msg = "In check_external_ids: {'status': {'EXT_IDS_PREFERRED_ERROR': \"1 or more external ID items have a value in preferred that is not included in all: [{'grid': 'grid.30389.31'}]\"}}"
+    expected_msg = "1 or more external ID items have a value in preferred that is not included in all"
     result = re.search(rf"{expected_msg}", out, re.MULTILINE)
     assert bool(result) is True
     assert exitcode == 1

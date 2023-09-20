@@ -81,13 +81,21 @@ def validate_dump(input, version, check_address, rel_file = None, path = None, s
     with ZipFile(input, "r") as zf:
         json_files_count = sum('.json' in s for s in zf.namelist())
         print(zf.namelist())
-        if json_files_count == 1:
-            for name in zf.namelist():
-                # assumes ror-data zip will only contain 1 JSON file
-                if '.json' in name:
-                    dump_unzipped = zf.extract(name, '.')
+        if json_files_count > 0:
+            if version == '2':
+                filenames = [name for name in zf.namelist() if 'ror-data_schema_v2.json' in name]
+                if len(filenames) == 1:
+                    dump_unzipped = zf.extract(filenames[0], '.')
+                else:
+                    print("Dump zip contains multiple schema_v2.json files. Something is wrong.")
+            else:
+                filenames = [name for name in zf.namelist() if 'ror-data.json' in name]
+                if len(filenames) == 1:
+                    dump_unzipped = zf.extract(filenames[0], '.')
+                else:
+                    print("Dump zip contains multiple ror_data.json files. Something is wrong.")
         else:
-            print("Dump zip contains multiple json files. Something is wrong.")
+            print("Dump zip contains no json files. Something is wrong.")
 
     records = u.get_json(dump_unzipped)
 
