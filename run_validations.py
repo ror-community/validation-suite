@@ -23,16 +23,17 @@ def set_args():
     parser.add_argument('-f', '--rel-file', help='Path to the file containing relationship mappings')
     parser.add_argument('-v', '--schema-version', help='ROR schema version to validate against (1 or 2)', required=True, choices=['1', '2'])
     parser.add_argument('-n', '--no-geonames', help='Skip Geonames API validation for address fields', action='store_true')
+    parser.add_argument('-d', '--domains', help='Validate domains against prod and release files', action='store_true', default=False)
     args = parser.parse_args()
     return args
 
-def run_validation_tests(record, version, check_address, path=None, rel_file=None):
+def run_validation_tests(record, version, check_address, check_domains, path=None, rel_file=None):
     """Runs validation tests on a json record"""
     if version == '1':
         validate = vt.Validate_Tests(record)
     if version == '2':
         validate = vt.Validate_Tests_V2(record)
-    validation_errors = validate.validate_all(check_address, file_path=path, rel_file=rel_file)
+    validation_errors = validate.validate_all(check_address, check_domains, file_path=path, rel_file=rel_file)
     return validation_errors
 
 def print_errors(errors,validation_errors):
@@ -80,7 +81,6 @@ def validate_dump(input, version, check_address, rel_file = None, path = None, s
     records = []
     with ZipFile(input, "r") as zf:
         json_files_count = sum('.json' in s for s in zf.namelist())
-        print(zf.namelist())
         if json_files_count > 0:
             if version == '2':
                 filenames = [name for name in zf.namelist() if 'ror-data_schema_v2.json' in name]
@@ -106,7 +106,7 @@ def validate_dump(input, version, check_address, rel_file = None, path = None, s
         valid, msg = vs.validate_record(r,schema,version)
         if valid:
             print("schema valid")
-            messages[record_name] = run_validation_tests(r, version, check_address, path, rel_file)
+            messages[record_name] = run_validation_tests(r, version, check_address, check_domains, path, rel_file)
             if len(messages[record_name]) == 0:
                 messages[record_name] = None
         else:
@@ -126,7 +126,7 @@ def validate_dump(input, version, check_address, rel_file = None, path = None, s
     else:
         sys.exit(0)
 
-def validate_files(input, version, check_address, rel_file = None, path = None, schema = None):
+def validate_files(input, version, check_address, check_domains, rel_file = None, path = None, schema = None):
     """Runs the files against the schema validator and the class that checks the usecases"""
     files = get_files(input)
     filename = ""
@@ -147,7 +147,7 @@ def validate_files(input, version, check_address, rel_file = None, path = None, 
         valid, msg = vs.validate_record(record, schema,version)
         if valid:
             print("schema valid")
-            messages[filename] = run_validation_tests(record, version, check_address, path, rel_file)
+            messages[filename] = run_validation_tests(record, version, check_address, check_domains, path, rel_file)
             if len(messages[filename]) == 0:
                 messages[filename] = None
         else:
@@ -174,16 +174,20 @@ def main():
     path = os.path.normpath(args.file_path) if args.file_path else None
     version  = args.schema_version
     check_address = True
+    check_domains = False
     if args.no_geonames:
         check_address = False
+    if args.domains:
+        check_domains = True
     if os.path.splitext(args.input)[1] == '.zip':
         # do not attempt to validate relationships or addresses in dump
         check_address = False
+        check_domains = False
         rel_file = None
         path = None
-        validate_dump(args.input, version, check_address, rel_file, path, schema)
+        validate_dump(args.input, version, check_address, check_domains, rel_file, path, schema)
     else:
-        validate_files(args.input, version, check_address, rel_file, path, schema)
+        validate_files(args.input, version, check_address, check_domains, rel_file, path, schema)
 
 
 if __name__ == "__main__":

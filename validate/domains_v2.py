@@ -16,6 +16,7 @@ def get_files(file_path):
         raise RuntimeError(f"{file_path} must be a valid file or directory")
     return files
 
+
 def check_domains_release(record, files):
     errors = []
     for domain in record['domains']:
@@ -32,17 +33,19 @@ def check_domains_release(record, files):
 def check_domains_prod(record):
     errors = []
     for domain in record['domains']:
-        params = {'query.advanced': 'domains:' + domain}
+        params = {'query.advanced': 'domains:' + domain, 'all_status': 'true'}
         try:
             rsp = requests.get(API_URL, params=params)
             print(rsp.url)
             rsp.raise_for_status()
             response = rsp.json()
+            print(response)
             if response['number_of_results'] > 0:
-                ids = [item['id'] for item in response['items']]
-                errors.append(f"{domain} exists on {response['number_of_results']} production record(s): {', '.join(ids)}.")
+                matched_records = [r for r in response['items'] if(r['id'] != record['id'] and domain in r['domains'])]
+                if len(matched_records) > 0:
+                    errors.append(f"{domain} exists on {len(matched_records)} production record(s): {', '.join([r['id'] for r in matched_records])}.")
         except requests.exceptions.RequestException as e:
-            raise RuntimeError (f"Couldn't complete request {rsp.url}: {e}")
+            raise RuntimeError (f"Couldn't complete request: {e}")
     return errors
 
 
@@ -51,6 +54,6 @@ def check_domains(current_record, file_path):
     if file_path:
         files = get_files(file_path)
         msg = check_domains_release(current_record, files)
-    if len(msg) == 0:
+    if not msg or len(msg) == 0:
         msg = check_domains_prod(current_record)
     return msg

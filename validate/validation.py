@@ -7,6 +7,7 @@ import validate.utilities as u
 import validate.helpers as vh
 import validate.relationships as vr
 import validate.relationships_v2 as vr2
+import validate.domains_v2 as vd2
 import datetime as dt
 
 class Validate_Tests:
@@ -206,6 +207,7 @@ class Validate_Tests_V2:
             msg['DOMAINS_ERROR'] = "Domains contains subdomains of other domains: " + ", ".join(substring_matches)
         # TO DO: add check for domain in other records
         # need api changes first
+        # check whether domains exist in a production record
         return vh.handle_check(name,msg)
 
 
@@ -218,7 +220,7 @@ class Validate_Tests_V2:
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
         return vh.handle_check(name,msg)
 
-    def validate_all(self, check_address, file_path=None, rel_file=None):
+    def validate_all(self, check_address, check_domains, file_path=None, rel_file=None):
         print("Validating " + vh.File['id'])
         # calling all public methods in this class and removing the current method name.
         # This enables future public methods to be called automatically as well
@@ -233,6 +235,11 @@ class Validate_Tests_V2:
         for methods in validator_functions:
             validate = getattr(self, methods)
             results.append(validate())
+        if check_domains and len(vh.File['domains']) > 0:
+            print("checking domains")
+            msg = vd2.check_domains(current_record = vh.File, file_path=file_path)
+            if msg:
+                results.append({'domains':msg})
         if file_path:
              # if relationship is being checked
             msg = vr2.process_relationships(current_record = vh.File, file_path=file_path, rel_file=rel_file)
