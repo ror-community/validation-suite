@@ -2,6 +2,7 @@ import json
 import os
 import requests
 
+#update when v2 is live on production
 API_URL = "http://api.dev.ror.org/v2/organizations"
 
 
