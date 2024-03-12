@@ -123,8 +123,8 @@ class Validate_Tests_V2:
         duplicates = []
         if len(links) > 0:
             duplicates = vh.check_duplicates(links)
-        if len(duplicates) > 0:
-            msg['LINKS_DUPLICATES_ERROR'] = "Multiple links have the same value(s): " + ", ".join(duplicates)
+            if len(duplicates) > 0:
+                msg['LINKS_DUPLICATES_ERROR'] = "Multiple links have the same value(s): " + ", ".join(duplicates)
             for l in links:
                 result = vh.validate_url(l)
                 if result:

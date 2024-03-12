@@ -31,14 +31,14 @@ def run_validation_tests(record, version, check_address, check_domains, path=Non
     """Runs validation tests on a json record"""
     if version == '1':
         validate = vt.Validate_Tests(record)
-        validation_errors = validate.validate_all(check_address, check_domains, file_path=path, rel_file=rel_file)
+        validation_errors = validate.validate_all(check_address, file_path=path, rel_file=rel_file)
         validation_warnings = []
     if version == '2':
         validate = vt.Validate_Tests_V2(record)
         validation_errors, validation_warnings = validate.validate_all(check_address, check_domains, file_path=path, rel_file=rel_file)
     return validation_errors, validation_warnings
 
-def print_warnings(warnings):
+def print_warnings(warnings, validation_warnings):
     """Printing all warnings picked up through the tests"""
     for msg in warnings:
         validation_warnings = True
@@ -188,6 +188,7 @@ def validate_files(input, version, check_address, check_domains, rel_file = None
         else:
             print("NOT schema valid")
             file_errors[filename] = schema_val_errors
+            file_warnings[filename] = None
 
         if file_errors[filename]:
             errors.append(deepcopy(file_errors))
@@ -198,7 +199,7 @@ def validate_files(input, version, check_address, check_domains, rel_file = None
         validation_errors = print_errors(errors, validation_errors)
 
     if len(warnings) > 0:
-        validation_warnings = print_warnings(warnings)
+        validation_warnings = print_warnings(warnings, validation_warnings)
 
     if validation_errors:
         with open(ERROR_LOG, 'r') as f:

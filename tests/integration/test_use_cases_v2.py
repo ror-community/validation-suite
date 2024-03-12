@@ -75,10 +75,10 @@ def test_invalid_names_duplicate_values_v2():
     full_path = os.path.join(dir, filename)
     required_args = format_required_args(full_path, V2_VERSION)
     out, err, exitcode = run_args(required_args, o_args, False)
-    expected_msg = "In check_names: {'status': {'NAMES_DUPLICATES_ERROR': 'Multiple names have the same value\(s\): UC System'}}"
+    expected_msg = "In check_names: {'status': {'NAMES_DUPLICATES_WARNING': 'Multiple names have the same value\(s\): UC System'}}"
     result = re.search(rf"{expected_msg}", out, re.MULTILINE)
     assert bool(result) is True
-    assert exitcode == 1
+    assert exitcode == 0
 
 
 def test_invalid_names_no_ror_display_v2():
