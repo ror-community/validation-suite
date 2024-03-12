@@ -120,6 +120,7 @@ class Validate_Tests_V2:
         links = [link['value'] for link in vh.File['links']]
         # removing empty strings
         links = list(filter(None, links))
+        duplicates = []
         if len(links) > 0:
             duplicates = vh.check_duplicates(links)
         if len(duplicates) > 0:
@@ -130,23 +131,24 @@ class Validate_Tests_V2:
                     msg[l] = result
         if len(msg) == 0:
             msg = None
-        return vh.handle_check(name,msg)
+        return vh.handle_check(name,msg), None
 
     def check_names(self):
         name = str(self.check_names.__name__)
-        msg = {}
+        error_msg = {}
+        warn_msg = {}
         name_types = []
         for record_name in vh.File['names']:
             for name_type in record_name['types']:
                 name_types.append(name_type)
         ror_display_count = [name_type for name_type in name_types if name_type == 'ror_display']
         if len(ror_display_count) != 1:
-            msg['NAMES_TYPES_ERROR'] = f'Exactly 1 name must have type ror_display. {len(ror_display_count)} names have ror_display in their name types.'
+            error_msg['NAMES_TYPES_ERROR'] = f'Exactly 1 name must have type ror_display. {len(ror_display_count)} names have ror_display in their name types.'
 
         names = [record_name['value'] for record_name in vh.File['names']]
         duplicates = vh.check_duplicates(names)
         if len(duplicates) > 0:
-            msg['NAMES_DUPLICATES_ERROR'] = "Multiple names have the same value(s): " + ", ".join(duplicates)
+            warn_msg['NAMES_DUPLICATES_WARNING'] = "Multiple names have the same value(s): " + ", ".join(duplicates)
         lang_errors = []
         for record_name in vh.File['names']:
             if record_name['lang'] and record_name['lang'] != "":
@@ -154,10 +156,12 @@ class Validate_Tests_V2:
                 if result:
                     lang_errors.append(result)
         if len(lang_errors) > 0:
-            msg['NAMES_LANG_ERROR'] = lang_errors
-        if len(msg) == 0:
-            msg = None
-        return vh.handle_check(name,msg)
+            error_msg['NAMES_LANG_ERROR'] = lang_errors
+        if len(error_msg) == 0:
+            error_msg = None
+        if len(warn_msg) == 0:
+            warn_msg = None
+        return vh.handle_check(name,error_msg), vh.handle_check(name,warn_msg)
 
     def check_locations(self):
         # compares ror and geonames address values
@@ -178,7 +182,7 @@ class Validate_Tests_V2:
                 location_errors = geonames_error
             if location_errors:
                 msg['LOCATION_ERROR_GEONAMES_ID_' + str(geonames_id)] = location_errors
-        return vh.handle_check(name,msg)
+        return vh.handle_check(name,msg), None
 
     def check_external_ids(self):
         name = str(self.check_external_ids.__name__)
@@ -196,7 +200,7 @@ class Validate_Tests_V2:
                     preferred_not_in_all.append({external_id['type']: external_id['preferred']})
         if len(preferred_not_in_all) > 0:
             msg['EXT_IDS_PREFERRED_ERROR'] = "1 or more external ID items have a value in preferred that is not included in all: " + str(preferred_not_in_all)
-        return vh.handle_check(name,msg)
+        return vh.handle_check(name,msg), None
 
 
     def check_domains(self):
@@ -208,10 +212,7 @@ class Validate_Tests_V2:
         substring_matches = vh.check_substrings(domains)
         if len(substring_matches) > 0:
             msg['DOMAINS_ERROR'] = "Domains contains subdomains of other domains: " + ", ".join(substring_matches)
-        # TO DO: add check for domain in other records
-        # need api changes first
-        # check whether domains exist in a production record
-        return vh.handle_check(name,msg)
+        return vh.handle_check(name,msg), None
 
 
     def check_established_year(self):
@@ -221,7 +222,7 @@ class Validate_Tests_V2:
         msg = None
         if isinstance(yr, int) and (yr <= 99 or yr > dt.date.today().year):
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
-        return vh.handle_check(name,msg)
+        return vh.handle_check(name,msg), None
 
     def validate_all(self, check_address, check_domains, file_path=None, rel_file=None):
         print("Validating " + vh.File['id'])
@@ -234,20 +235,25 @@ class Validate_Tests_V2:
             method_name = str(self.check_locations.__name__)
             validator_functions.remove(method_name)
 
-        results = []
+        errors = []
+        warnings = []
         for methods in validator_functions:
             validate = getattr(self, methods)
-            results.append(validate())
+            error_msg, warn_msg = validate()
+            errors.append(error_msg)
+            warnings.append(warn_msg)
+            #results.append(validate())
         if check_domains and len(vh.File['domains']) > 0:
             print("checking domains")
             msg = vd2.check_domains(current_record = vh.File, file_path=file_path)
             if msg:
-                results.append({'domains':msg})
+                errors.append({'domains':msg})
         if file_path:
              # if relationship is being checked
             msg = vr2.process_relationships(current_record = vh.File, file_path=file_path, rel_file=rel_file)
             if msg:
-                results.append({'relationships':msg})
-        results = list(filter(None,results))
-        return results
+                errors.append({'relationships':msg})
+        errors = list(filter(None,errors))
+        warnings = list(filter(None,warnings))
+        return errors, warnings
 

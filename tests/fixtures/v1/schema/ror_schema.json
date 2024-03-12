@@ -259,11 +259,17 @@
             }
           },
           "lat": {
-            "type": "number",
+            "type": [
+                "null",
+                "number"
+            ],
             "readOnly": true
           },
           "lng": {
-            "type": "number",
+            "type": [
+                "null",
+                "number"
+            ],
             "readOnly": true
           },
           "city": {
@@ -287,7 +293,10 @@
             "default": null
           },
           "country_geonames_id": {
-            "type": "integer",
+            "type": [
+                "null",
+                "integer"
+            ],
             "readOnly": true
           },
           "primary": {
