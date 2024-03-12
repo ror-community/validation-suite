@@ -11,7 +11,7 @@ import logging
 from zipfile import ZipFile, ZIP_DEFLATED
 
 ERROR_LOG = "validation_errors.log"
-logging.basicConfig(filename=ERROR_LOG,level=logging.ERROR, filemode='w')
+logging.basicConfig(filename=ERROR_LOG,level=logging.WARNING, filemode='w')
 
 def set_args():
     """CLI"""
@@ -31,10 +31,25 @@ def run_validation_tests(record, version, check_address, check_domains, path=Non
     """Runs validation tests on a json record"""
     if version == '1':
         validate = vt.Validate_Tests(record)
+        validation_errors = validate.validate_all(check_address, check_domains, file_path=path, rel_file=rel_file)
+        validation_warnings = []
     if version == '2':
         validate = vt.Validate_Tests_V2(record)
-    validation_errors = validate.validate_all(check_address, check_domains, file_path=path, rel_file=rel_file)
-    return validation_errors
+        validation_errors, validation_warnings = validate.validate_all(check_address, check_domains, file_path=path, rel_file=rel_file)
+    return validation_errors, validation_warnings
+
+def print_warnings(warnings):
+    """Printing all warnings picked up through the tests"""
+    for msg in warnings:
+        validation_warnings = True
+        for filename, err in msg.items():
+            logging.warning(f"FOR FILE: {filename}")
+            if isinstance(err, list):
+                logging.warning("VALIDATION TEST WARNINGS:")
+                for e in err:
+                    for loc, message in e.items():
+                        logging.warning(f"In {loc}: {message}")
+    return validation_warnings
 
 def print_errors(errors,validation_errors):
     """Printing all errors picked up through the tests"""
@@ -67,10 +82,12 @@ def get_files(input):
         raise RuntimeError(f"{input} must be a valid file or directory")
     return files
 
-def validate_dump(input, version, check_address, rel_file = None, path = None, schema = None):
+def validate_dump(input, version, check_address, check_domains, rel_file = None, path = None, schema = None):
     """Runs the files against the schema validator and the class that checks the usecases"""
     validation_errors = False
+    validation_warnings = False
     errors = []
+    warnings = []
     '''
     if (rel_file and not(path)):
         raise AttributeError(f"Relationship file: {rel_file} must be passed with a --file-path argument which is a path to the rest of the files for relationship validation")
@@ -101,37 +118,52 @@ def validate_dump(input, version, check_address, rel_file = None, path = None, s
 
     for r in records:
         messages = {}
+        file_errors = {}
+        file_warnings = {}
         record_name  = r['id'].split("https://ror.org/")[1]
         valid = True
         valid, msg = vs.validate_record(r,schema,version)
         if valid:
             print("schema valid")
-            messages[record_name] = run_validation_tests(r, version, check_address, check_domains, path, rel_file)
-            if len(messages[record_name]) == 0:
-                messages[record_name] = None
+            file_errors[record_name], file_warnings[record_name] = run_validation_tests(r, version, check_address, check_domains, path, rel_file)
+            if len(file_errors[record_name]) == 0:
+                file_errors[record_name] = None
+            if len(file_warnings[record_name]) == 0:
+                file_warnings[record_name] = None
         else:
             print("NOT schema valid")
-            messages[record_name] = msg
+            file_errors[record_name] = msg
 
-        if messages[record_name]:
-            errors.append(deepcopy(messages))
+        if file_errors[record_name]:
+            errors.append(deepcopy(file_errors))
+        if file_warnings[record_name]:
+            warnings.append(deepcopy(file_warnings))
 
     if len(errors) > 0:
         validation_errors = print_errors(errors, validation_errors)
+
+    if len(warnings) > 0:
+        validation_warnings = print_warnings(warnings)
 
     if validation_errors:
         with open(ERROR_LOG, 'r') as f:
             print(f.read())
         sys.exit(1)
     else:
+        if validation_warnings:
+            with open(ERROR_LOG, 'r') as f:
+                print(f.read())
         sys.exit(0)
+
 
 def validate_files(input, version, check_address, check_domains, rel_file = None, path = None, schema = None):
     """Runs the files against the schema validator and the class that checks the usecases"""
     files = get_files(input)
     filename = ""
     validation_errors = False
+    validation_warnings = False
     errors = []
+    warnings = []
 
     if (rel_file and not(path)):
         raise AttributeError(f"Relationship file: {rel_file} must be passed with a --file-path argument which is a path to the rest of the files for relationship validation")
@@ -139,32 +171,43 @@ def validate_files(input, version, check_address, check_domains, rel_file = None
         u.arg_exists(rel_file)
 
     for f in files:
-        messages = {}
+        file_errors = {}
+        file_warnings = {}
         filename = os.path.basename(f).split(".")[0]
         u.arg_exists(f)
         record = u.get_json(f)
         valid = True
-        valid, msg = vs.validate_record(record, schema,version)
+        valid, schema_val_errors = vs.validate_record(record, schema,version)
         if valid:
             print("schema valid")
-            messages[filename] = run_validation_tests(record, version, check_address, check_domains, path, rel_file)
-            if len(messages[filename]) == 0:
-                messages[filename] = None
+            file_errors[filename], file_warnings[filename] = run_validation_tests(record, version, check_address, check_domains, path, rel_file)
+            if len(file_errors[filename]) == 0:
+                file_errors[filename] = None
+            if len(file_warnings[filename]) == 0:
+                file_warnings[filename] = None
         else:
             print("NOT schema valid")
-            messages[filename] = msg
+            file_errors[filename] = schema_val_errors
 
-        if messages[filename]:
-            errors.append(deepcopy(messages))
+        if file_errors[filename]:
+            errors.append(deepcopy(file_errors))
+        if file_warnings[filename]:
+            warnings.append(deepcopy(file_warnings))
 
     if len(errors) > 0:
         validation_errors = print_errors(errors, validation_errors)
+
+    if len(warnings) > 0:
+        validation_warnings = print_warnings(warnings)
 
     if validation_errors:
         with open(ERROR_LOG, 'r') as f:
             print(f.read())
         sys.exit(1)
     else:
+        if validation_warnings:
+            with open(ERROR_LOG, 'r') as f:
+                print(f.read())
         sys.exit(0)
 
 def main():
