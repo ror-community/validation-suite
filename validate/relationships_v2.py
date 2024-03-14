@@ -50,7 +50,7 @@ def validate_relationship(file_rel, related_rel):
 def generate_related_relationships(id, names, status, rel):
     record = {}
     record['id'] = id
-    record['name'] = vh.get_ror_display_name(names)
+    record['names'] = vh.get_ror_display_name(names)
     record['status'] = status
     if len(rel) > 0:
         record['related_relationship'] = list(
@@ -86,7 +86,7 @@ def get_related_record_api(record_id):
     try:
         response = rsp.json()
         related_record = generate_related_relationships(
-                response['id'], response['name'], response['status'], response['relationships'])
+                response['id'], response['names'], response['status'], response['relationships'])
     except Exception as e:
         raise RuntimeError (f"Couldn't generate related record data for {download_url}: {e}")
 
