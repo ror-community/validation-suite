@@ -6,7 +6,7 @@ from csv import DictReader
 from validate.utilities import *
 import validate.helpers as vh
 
-API_URL = "http://api.ror.org/organizations/"
+API_URL = "http://api.ror.org/v2/organizations"
 INVERSE_TYPES = ('parent', 'child', 'related')
 INFO = {"file_path": '', "record_info": {}, "errors": []}
 
