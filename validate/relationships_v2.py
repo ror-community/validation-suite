@@ -37,6 +37,7 @@ def validate_relationship(file_rel, related_rel):
             err[related_rel['id']].append(f"Illegal relationship pairing: relationship type: {related_rel['related_relationship']['type']} should be {paired_value}")
 
     # Names of related institutions must equal each other
+
     mappings = rel_values_mapping()
     for k, v in mappings.items():
         if not (file_rel[k] == related_rel[v]) or (related_rel['related_relationship'] is not None and not (
@@ -50,7 +51,7 @@ def validate_relationship(file_rel, related_rel):
 def generate_related_relationships(id, names, status, rel):
     record = {}
     record['id'] = id
-    record['names'] = vh.get_ror_display_name(names)
+    record['name'] = vh.get_ror_display_name(names)
     record['status'] = status
     if len(rel) > 0:
         record['related_relationship'] = list(
