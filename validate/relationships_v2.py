@@ -265,7 +265,9 @@ def process_relationships(current_record, file_path, rel_file=None):
     msg = check_duplicate_relationships()
     if len(msg) == 0:
         if rel_file and current_record['status'] == 'active':
-            msg = check_relationships_from_file(rel_file)
+            msg = check_delete_relationships_from_file(rel_file)
+            if len(msg) == 0:
+                msg = check_relationships_from_file(rel_file)
         else:
             if INFO["record_info"]['rel']:
                 if current_record['status'] == 'active':
