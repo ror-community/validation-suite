@@ -165,7 +165,9 @@ def check_delete_relationships_from_file(rel_file):
                 file_rel = list(rel for rel in INFO["record_info"]['rel'] if (rel['id'] == i))
                 if len(file_rel) > 0:
                     #check csv for additional relationships between current record ID and other ID
-                    csv_current_id_rels_to_other_id = list(r for r in relationships if (r['record_id'] == INFO["record_info"]['id'] and r['related_id'] == i and r['record_relationship'].lower() != 'delete'))
+                    csv_current_id_rels_to_other_id = list(r for r in relationships if (r['record_id'] == INFO["record_info"]['id'] and \
+                                                                                        (r['related_id'] == i or r['record_id'] == i) and \
+                                                                                        r['record_relationship'].lower() != 'delete'))
                     if len(csv_current_id_rels_to_other_id) == 0:
                         INFO["errors"].append(f"Record {INFO['record_info']['id']} contains relationship(s) to record {i} but CSV contains 'delete' type for this pairing and has no other rows with other types.")
     return INFO["errors"]
