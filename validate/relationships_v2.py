@@ -143,33 +143,22 @@ def get_single_related_relationship(related_id):
 
 def check_delete_relationships_from_file(rel_file):
     relationships = read_relationship_from_file(rel_file)
-    get_delete_record_ids = list(i['record_id'] for i in relationships if i['record_relationship'].lower() == 'delete')
-    get_delete_related_ids = list(i['related_id'] for i in relationships if i['record_relationship'].lower() == 'delete')
-    if INFO["record_info"]['id'] in get_delete_record_ids or INFO["record_info"]['id'] in get_delete_related_ids:
-        if INFO["record_info"]['rel']:
-            #get all rels from CSV file with current record ID and type delete
-            all_delete_id_relationships = list(i for i in relationships if \
-                                               ((INFO["record_info"]['id'] in get_delete_record_ids or \
-                                                INFO["record_info"]['id'] in get_delete_related_ids) \
-                                                and i['record_relationship'].lower() == 'delete'))
-            ids_current_id_deleted_from = []
-            for r in all_delete_id_relationships:
-                other_id = None
-                if INFO["record_info"]['id'] == r['related_id']:
-                    other_id = r['record_id']
-                else:
-                    other_id = r['related_id']
-                ids_current_id_deleted_from.append(other_id)
-            for i in ids_current_id_deleted_from:
-                #get all relationships from current record where related ID matches related ID in CSV
-                file_rel = list(rel for rel in INFO["record_info"]['rel'] if (rel['id'] == i))
-                if len(file_rel) > 0:
-                    #check csv for additional relationships between current record ID and other ID
-                    csv_current_id_rels_to_other_id = list(r for r in relationships if ((r['record_id'] == INFO["record_info"]['id'] and r['related_id'] == i) or \
-                                                                                        (r['record_id'] == i and r['related_id'] == INFO["record_info"]['id'])) and \
-                                                                                        r['record_relationship'].lower() != 'delete')
-                    if len(csv_current_id_rels_to_other_id) == 0:
-                        INFO["errors"].append(f"Record {INFO['record_info']['id']} contains relationship(s) to record {i} but CSV contains 'delete' type for this pairing and has no other rows with other types.")
+    delete_pairings = []
+    for r in relationships:
+        if r['record_relationship'].lower() == 'delete':
+            delete_pairings.append([r['record_id'], r['related_id']])
+    for d in delete_pairings:
+        if INFO["record_info"]['id'] in d:
+        other_id = d[0] if d[0] != INFO["record_info"]['id'] else d[1]
+            #get all relationships from current record where related ID matches related ID in CSV
+        file_rel = list(rel for rel in INFO["record_info"]['rel'] if (rel['id'] == other_id))
+        if len(file_rel) > 0:
+            #check csv for additional relationships between current record ID and other ID
+            csv_current_id_rels_to_other_id = list(r for r in relationships if ((r['record_id'] == INFO["record_info"]['id'] and r['related_id'] == other_id) or \
+                                                                                (r['record_id'] == other_id and r['related_id'] == INFO["record_info"]['id'])) and \
+                                                                                r['record_relationship'].lower() != 'delete')
+            if len(csv_current_id_rels_to_other_id) == 0:
+                INFO["errors"].append(f"Record {INFO['record_info']['id']} contains relationship(s) to record {other_id} but CSV contains 'delete' type for this pairing and has no other rows with other types.")
     return INFO["errors"]
 
 def check_relationships_from_file(rel_file):
