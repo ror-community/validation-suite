@@ -7,7 +7,7 @@ import validators
 from csv import DictReader
 
 DEFAULT_SCHEMA_V1_0 = "https://raw.githubusercontent.com/ror-community/ror-schema/master/ror_schema.json"
-DEFAULT_SCHEMA_V2_0 = "https://raw.githubusercontent.com/ror-community/ror-schema/schema-v2/ror_schema_v2_0.json"
+DEFAULT_SCHEMA_V2_0 = "https://raw.githubusercontent.com/ror-community/ror-schema/master/ror_schema_v2_0.json"
 API_URL = "https://api.ror.org/organizations"
 
 GEONAMES = {}
