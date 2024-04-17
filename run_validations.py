@@ -143,7 +143,7 @@ def validate_dump(input, version, check_address, check_domains, rel_file = None,
         validation_errors = print_errors(errors, validation_errors)
 
     if len(warnings) > 0:
-        validation_warnings = print_warnings(warnings)
+        validation_warnings = print_warnings(warnings, validation_warnings)
 
     if validation_errors:
         with open(ERROR_LOG, 'r') as f:
