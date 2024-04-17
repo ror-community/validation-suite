@@ -133,7 +133,7 @@ def validate_dump(input, version, check_address, check_domains, rel_file = None,
         else:
             print("NOT schema valid")
             file_errors[record_name] = msg
-
+            file_warnings[record_name] = None
         if file_errors[record_name]:
             errors.append(deepcopy(file_errors))
         if file_warnings[record_name]:
