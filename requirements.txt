@@ -1,5 +1,6 @@
-jsonschema==3.2.0
+jsonschema[format]==4.17.3
 requests==2.23.0
 validators==0.18.2
 pycountry==20.7.3
 pytest==6.2.4
+rfc3986-validator

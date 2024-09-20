@@ -1,12 +1,14 @@
 import json
 import sys
 import jsonschema
+import pycountry
 import requests
 import validators
 from validate.utilities import *
 from copy import deepcopy
 
 File = None
+ROR_DISPLAY = "ror_display"
 
 def handle_check(name,msg=None):
     # all the validator messages use this pattern
@@ -20,14 +22,38 @@ def validate_url(url):
     msg = None
     validated_url = validators.url(url)
     if not(validated_url):
-        msg = "Validation Error"
+        msg = "URL validation Error"
     return msg
+
+def check_lang_code(lang):
+    msg = None
+    pylanguage = pycountry.languages.get(alpha_2=lang)
+    if not(pylanguage):
+        msg = f'Language value {lang} is not an iso639 standard'
+    return msg
+
+def check_duplicates(list_to_check):
+    duplicates = []
+    unique_items = []
+    for item in list_to_check:
+        if item not in unique_items:
+            unique_items.append(item)
+    duplicates = [item for item in unique_items if list_to_check.count(item) > 1]
+    return duplicates
+
+def check_substrings(list_to_check):
+    substring_matches = []
+    for item in list_to_check:
+        for i in list_to_check:
+            if item in i:
+                if i.index(item) > 0:
+                    substring_matches.append(i)
+    return substring_matches
+
 
 def check_country(geonames_response):
     # checks country code and country name
     country_check = {}
-    print(File['addresses'][0])
-    print(geonames_response)
     geonames_country_code = geonames_response['countryCode']
     record_country_code = File['country']['country_code']
     geonames_country_name = geonames_response['countryName']
@@ -39,7 +65,7 @@ def check_country(geonames_response):
     return country_check
 
 def mapped_geoname_record():
-    # mapping of ror fields to geoname response fields
+    # mapping of ror v1 fields to geoname response fields
     ror_to_geoname = {
           "lat": "lat",
           "lng": "lng",
@@ -61,6 +87,20 @@ def mapped_geoname_record():
             },
             "country_geonames_id": "countryId"
         }}
+    return ror_to_geoname
+
+def mapped_geoname_record_v2():
+    # mapping of ror v2 fields to geoname response fields
+    ror_to_geoname = {
+        "geonames_id": "geonameId",
+        "geonames_details": {
+            "country_code": "countryCode",
+            "country_name": "countryName",
+            "lat": "lat",
+            "lng": "lng",
+            "name": "name"
+        }
+    }
     return ror_to_geoname
 
 def get_geonames_response(id):
@@ -85,9 +125,25 @@ def get_record_address():
     id = address['geonames_city']['id']
     return id,address
 
+def get_ror_display_name(names):
+    ror_display = None
+    for name in names:
+        if ROR_DISPLAY in name['types']:
+            ror_display = name['value']
+            break
+    return ror_display
+
+
 def get_relationship_info():
     # returns relationship dictionary
     return {"id": File['id'], "name": File['name'],"rel": File["relationships"]}
+
+
+def get_relationship_info_v2():
+    # returns relationship dictionary
+    name = get_ror_display_name(File['names'])
+    return {"id": File['id'], "name": name,"rel": File["relationships"]}
+
 
 def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
     compare = msg
@@ -111,6 +167,24 @@ def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
             else:
                 if (value in geonames_response) and (geonames_response[value] != ""):
                     geonames_value = geonames_response[value]
+            if str(ror_value) != str(geonames_value):
+                compare[key] = {"ror": ror_value, "geonames": geonames_value}
+    return deepcopy(compare)
+
+def compare_ror_geoname_v2(mapped_fields,ror_address,geonames_response,msg={}):
+    compare = msg
+    original_address = deepcopy(ror_address)
+    for key, value in mapped_fields.items():
+        # If value is of dict type then print
+        # all key-value pairs in the nested dictionary
+        if isinstance(value, dict):
+            if key in ror_address:
+                compare_ror_geoname_v2(value,ror_address[key],geonames_response,compare)
+        else:
+            ror_value = ror_address[key] if key in ror_address else original_address[key]
+            geonames_value = None
+            if (value in geonames_response) and (geonames_response[value] != ""):
+                geonames_value = geonames_response[value]
             if str(ror_value) != str(geonames_value):
                 compare[key] = {"ror": ror_value, "geonames": geonames_value}
     return deepcopy(compare)
