@@ -18,7 +18,8 @@ def test_missing_fields_v2():
         required_args = format_required_args(full_path, V2_VERSION)
         out, err, exitcode = run_args(required_args, o_args)
         field = os.path.splitext(f)[0]
-        result = re.search(r'File is missing field\(s\)\: {0}'.format(field), out, re.MULTILINE)
+        print(field)
+        result = re.search(rf'File is missing field\(s\)\: {field}', out, re.MULTILINE)
         assert bool(result) is True
         assert exitcode == 1
 
@@ -193,6 +194,22 @@ def test_invalid_location_v2():
     result = re.search(rf"{expected_msg}", out, re.MULTILINE)
     assert bool(result) is True
     assert exitcode == 1
+
+
+def test_invalid_continent_name_code_pair_v2():
+    filename = "invalid_continent_name_code_pair.json"
+    sub_folders = invalid_sub_folders()
+    dir = invalid_file_path(V2_VERSION) + sub_folders["usecase_issues"]
+    schema = schema_fixture(V2_VERSION)
+    o_args = format_optional_args(s = schema)
+    full_path = os.path.join(dir, filename)
+    required_args = format_required_args(full_path, V2_VERSION)
+    out, err, exitcode = run_args(required_args, o_args, False)
+    expected_msg = "'continent_name': {'ror': 'Europe', 'geonames': 'North America'}"
+    result = re.search(rf"{expected_msg}", out, re.MULTILINE)
+    assert bool(result) is True
+    assert exitcode == 1
+
 
 
 def test_invalid_names_duplicate_values_v2():

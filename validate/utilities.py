@@ -8,6 +8,7 @@ from csv import DictReader
 
 DEFAULT_SCHEMA_V1_0 = "https://raw.githubusercontent.com/ror-community/ror-schema/master/ror_schema.json"
 DEFAULT_SCHEMA_V2_0 = "https://raw.githubusercontent.com/ror-community/ror-schema/master/ror_schema_v2_0.json"
+DEFAULT_SCHEMA_V2_1 = "https://raw.githubusercontent.com/ror-community/ror-schema/refs/heads/schema-v2-1/ror_schema_v2_1.json"
 API_URL = "https://api.ror.org/organizations"
 
 GEONAMES = {}
@@ -24,7 +25,7 @@ def get_schema_from_url(version):
         url = DEFAULT_SCHEMA_V1_0
     if version == '2':
         print("getting v2 schema")
-        url = DEFAULT_SCHEMA_V2_0
+        url = DEFAULT_SCHEMA_V2_1
     rsp = requests.get(url)
     rsp.raise_for_status()
     return rsp.json()

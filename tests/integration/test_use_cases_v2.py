@@ -78,7 +78,7 @@ def test_invalid_names_duplicate_values_v2():
     expected_msg = "In check_names: {'status': {'NAMES_DUPLICATES_WARNING': 'Multiple names have the same value\(s\): UC System'}}"
     result = re.search(rf"{expected_msg}", out, re.MULTILINE)
     assert bool(result) is True
-    assert exitcode == 0
+    assert exitcode == 1
 
 
 def test_invalid_names_no_ror_display_v2():
