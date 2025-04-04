@@ -63,9 +63,10 @@ class Validate_Tests:
         msg = {}
         if len(labels) > 0:
             for label in labels:
-                result = vh.check_lang_code(label['iso639'])
-                if result:
-                    msg = result
+                if label['iso639']:
+                    result = vh.check_lang_code(label['iso639'])
+                    if result:
+                        msg = result
         if len(msg) == 0:
             msg = None
         return vh.handle_check(name,msg)
@@ -172,12 +173,13 @@ class Validate_Tests_V2:
             location_errors = {}
             geonames_id = location['geonames_id']
             geonames_response,geonames_error = vh.get_geonames_response(geonames_id)
-            result = None
-            compare = {}
             if geonames_response:
                 mapped_fields = vh.mapped_geoname_record_v2()
-                #compares the country in the record against the response
                 location_errors = vh.compare_ror_geoname_v2(mapped_fields,location,geonames_response,{})
+                # checks that continent name matches continent code - continent name is not in geonames response
+                continent_test = vh.check_continent_v2(location)
+                if continent_test:
+                    location_errors.update(continent_test)
             else:
                 location_errors = geonames_error
             if location_errors:

@@ -7,19 +7,19 @@ def valid_input(version):
     if version == '1':
         return ["tests/fixtures/v1/valid/015m7wh34.json","tests/fixtures/v1/valid"]
     if version == '2':
-        return ["tests/fixtures/v2/valid/example_record_v2_0.json","tests/fixtures/v2/valid"]
+        return ["tests/fixtures/v2_1/valid/example_record_v2_1.json","tests/fixtures/v2_1/valid"]
 
 def valid_file_path(version):
     if version == '1':
         return "tests/fixtures/v1/valid/"
     if version == '2':
-        return "tests/fixtures/v2/valid/"
+        return "tests/fixtures/v2_1/valid/"
 
 def invalid_file_path(version):
     if version == '1':
         return "tests/fixtures/v1/invalid/"
     if version == '2':
-        return "tests/fixtures/v2/invalid/"
+        return "tests/fixtures/v2_1/invalid/"
 
 def invalid_sub_folders():
     dirs = {"missing_fields": "missing_fields/",
@@ -33,7 +33,7 @@ def schema_fixture(version):
     if version == '1':
         return "tests/fixtures/v1/schema/ror_schema.json"
     if version == '2':
-        return "tests/fixtures/v2/schema/ror_schema_v2_0.json"
+        return "tests/fixtures/v2_1/schema/ror_schema_v2_1.json"
 
 def invocation():
     return ["python", "run_validations.py"]

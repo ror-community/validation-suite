@@ -9,6 +9,15 @@ from copy import deepcopy
 
 File = None
 ROR_DISPLAY = "ror_display"
+CONTINENT_CODES_NAMES = {
+    "AF": "Africa",
+    "AN": "Antarctica",
+    "AS": "Asia",
+    "EU": "Europe",
+    "NA": "North America",
+    "OC": "Oceania",
+    "SA": "South America"
+}
 
 def handle_check(name,msg=None):
     # all the validator messages use this pattern
@@ -64,6 +73,15 @@ def check_country(geonames_response):
         country_check['country_name'] = {'ror': record_country_name, 'geonames': geonames_country_name}
     return country_check
 
+def check_continent_v2(location):
+    continent_check = {}
+    if location['geonames_details']['continent_code']:
+        geonames_continent_name = CONTINENT_CODES_NAMES[location['geonames_details']['continent_code']]
+        record_continent_name = location['geonames_details']['continent_name']
+        if  geonames_continent_name != record_continent_name:
+            continent_check['continent_name'] = {'ror': record_continent_name, 'geonames':  geonames_continent_name}
+    return continent_check
+
 def mapped_geoname_record():
     # mapping of ror v1 fields to geoname response fields
     ror_to_geoname = {
@@ -94,8 +112,11 @@ def mapped_geoname_record_v2():
     ror_to_geoname = {
         "geonames_id": "geonameId",
         "geonames_details": {
+            "continent_code": "continentCode",
             "country_code": "countryCode",
             "country_name": "countryName",
+            "country_subdivision_code": ["adminCodes1", "ISO3166_2"],
+            "country_subdivision_name": "adminName1",
             "lat": "lat",
             "lng": "lng",
             "name": "name"
@@ -183,8 +204,13 @@ def compare_ror_geoname_v2(mapped_fields,ror_address,geonames_response,msg={}):
         else:
             ror_value = ror_address[key] if key in ror_address else original_address[key]
             geonames_value = None
-            if (value in geonames_response) and (geonames_response[value] != ""):
-                geonames_value = geonames_response[value]
+            if key == 'country_subdivision_code':
+                if value[0] in geonames_response:
+                    if geonames_response[value[0]][value[1]] != "":
+                        geonames_value = geonames_response[value[0]][value[1]]
+            else:
+                if (value in geonames_response) and (geonames_response[value] != ""):
+                    geonames_value = geonames_response[value]
             if str(ror_value) != str(geonames_value):
                 compare[key] = {"ror": ror_value, "geonames": geonames_value}
     return deepcopy(compare)
