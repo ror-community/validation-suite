@@ -3,7 +3,7 @@ import os
 import requests
 
 #update when v2 is live on production
-API_URL = "http://api.dev.ror.org/v2/organizations"
+API_URL = "https://api.ror.org/v2/organizations"
 
 
 def get_files(file_path):

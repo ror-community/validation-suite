@@ -1,5 +1,5 @@
 jsonschema[format]==4.17.3
-requests==2.23.0
+requests==2.32.5
 validators==0.18.2
 pycountry==20.7.3
 pytest==6.2.4
