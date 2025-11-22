@@ -206,8 +206,9 @@ def compare_ror_geoname_v2(mapped_fields,ror_address,geonames_response,msg={}):
             geonames_value = None
             if key == 'country_subdivision_code':
                 if value[0] in geonames_response:
-                    if geonames_response[value[0]][value[1]] != "":
-                        geonames_value = geonames_response[value[0]][value[1]]
+                    if isinstance(geonames_response[value[0]], dict) and value[1] in geonames_response[value[0]]:
+                        if geonames_response[value[0]][value[1]] != "":
+                            geonames_value = geonames_response[value[0]][value[1]]
             else:
                 if (value in geonames_response) and (geonames_response[value] != ""):
                     geonames_value = geonames_response[value]
